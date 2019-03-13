@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>2019-3-13-github+hexo搭建博客</title>
+      <link href="/passages/2019-3-13-github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+      <url>/passages/2019-3-13-github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a><p>github+hexo搭建博客<br>第一步<br>创建github账号，新建项目<br>注意项目名一定要设置成以下格式：yourusername.github.io(其中yourusername是github的账号名)<br>之后下载git和nodejs<br>参考资料<br><a href="https://zhuanlan.zhihu.com/p/44213627" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/44213627</a><br><a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">https://www.cnblogs.com/fengxiongZz/p/7707219.html</a><br><a href="https://www.jianshu.com/p/f4cc5866946b" target="_blank" rel="noopener">https://www.jianshu.com/p/f4cc5866946b</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hello World</title>
       <link href="/passages/hello-world/"/>
       <url>/passages/hello-world/</url>
