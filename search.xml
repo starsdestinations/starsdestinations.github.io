@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>2019-3-14-Xman-teamfour题解</title>
+      <link href="/passages/2019-3-14-Xman-teamfour%E9%A2%98%E8%A7%A3/"/>
+      <url>/passages/2019-3-14-Xman-teamfour%E9%A2%98%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Xman冬令营结营赛题目teamfour题解"><a href="#Xman冬令营结营赛题目teamfour题解" class="headerlink" title="Xman冬令营结营赛题目teamfour题解"></a>Xman冬令营结营赛题目teamfour题解</h1><h2 id="第一步：APK文件逆向"><a href="#第一步：APK文件逆向" class="headerlink" title="第一步：APK文件逆向"></a>第一步：APK文件逆向</h2><p>apk文件的逆向工具有非常多种<br>1、dex-tool+jd-gui的组合<br>先把dex-tool文件中的bin文件夹和d2j_invoke.bat、d2j-dex2jar.bat以及想要转化的classes.dex文件放到同一个文件夹，然后打开命令行cd到该文件夹或者右键使用git bash工具打开命令行，输入 ./d2j-dex2jar.bat ./classes.dex，就会生成一个jar文件，随后就能用jd-gui打开这个jar文件，浏览java代码了<br>2、jadx或者jeb<br>jadx和jeb的使用相对而言都很简单，jadx打开bin目录下的jadx-gui.bat，在弹出的窗口的左上角选择打开对应的apk文件就能浏览java代码了，jeb同样，但区别是jeb打开apk文件后出来的是smali代码，这时候需要右键把smali转化成java代码，这一点感觉跟ida差不多</p><p>有以上这些工具就能初步地进行安卓逆向分析了，当然只是静态分析smali代码，apk中的c语言编写的jni则需要用ida进行静态分析</p><h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p><img src="/images/1.png" alt="avatar"><br>这道题有一个坑，虽然在代码中看起来是要通过md5得到flag_one，然后通过des拿到flag_two，最后组合成flag，但实际上flag_one藏在res资源文件中的drawable文件内的图片内，用notepad打开文件搜索flag就能得到“This is only a half FLAG: AndroMan”<br>暂时到这，des加密实在看得头疼，手边没有root的手机没办法进行动态调试，手机未到的这两天先学习一下rsa和des加密。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2019-3-13-github+hexo搭建博客</title>
       <link href="/passages/2019-3-13-github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
       <url>/passages/2019-3-13-github-hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>

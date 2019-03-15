@@ -6,7 +6,7 @@
   <meta name="author" content="starsdestinations">
   
   
-  <title>Hello World | Hexo</title>
+  <title>2019-3-14-Xman-teamfour题解 | Hexo</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -162,7 +162,7 @@
   <div class="passage">
   <div class="passage-meta">
     <span>
-      <i class="fa fa-calendar"></i>2019-03-13
+      <i class="fa fa-calendar"></i>2019-03-14
     </span>
     
     
@@ -172,19 +172,13 @@
     
   </div>
   <h1 class="passage-title">
-    Hello World
+    2019-3-14-Xman-teamfour题解
   </h1>
   
   <article class="passage-article">
-    <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+    <h1 id="Xman冬令营结营赛题目teamfour题解"><a href="#Xman冬令营结营赛题目teamfour题解" class="headerlink" title="Xman冬令营结营赛题目teamfour题解"></a>Xman冬令营结营赛题目teamfour题解</h1><h2 id="第一步：APK文件逆向"><a href="#第一步：APK文件逆向" class="headerlink" title="第一步：APK文件逆向"></a>第一步：APK文件逆向</h2><p>apk文件的逆向工具有非常多种<br>1、dex-tool+jd-gui的组合<br>先把dex-tool文件中的bin文件夹和d2j_invoke.bat、d2j-dex2jar.bat以及想要转化的classes.dex文件放到同一个文件夹，然后打开命令行cd到该文件夹或者右键使用git bash工具打开命令行，输入 ./d2j-dex2jar.bat ./classes.dex，就会生成一个jar文件，随后就能用jd-gui打开这个jar文件，浏览java代码了<br>2、jadx或者jeb<br>jadx和jeb的使用相对而言都很简单，jadx打开bin目录下的jadx-gui.bat，在弹出的窗口的左上角选择打开对应的apk文件就能浏览java代码了，jeb同样，但区别是jeb打开apk文件后出来的是smali代码，这时候需要右键把smali转化成java代码，这一点感觉跟ida差不多</p>
+<p>有以上这些工具就能初步地进行安卓逆向分析了，当然只是静态分析smali代码，apk中的c语言编写的jni则需要用ida进行静态分析</p>
+<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p><img src="/images/1.png" alt="avatar"><br>这道题有一个坑，虽然在代码中看起来是要通过md5得到flag_one，然后通过des拿到flag_two，最后组合成flag，但实际上flag_one藏在res资源文件中的drawable文件内的图片内，用notepad打开文件搜索flag就能得到“This is only a half FLAG: AndroMan”<br>暂时到这，des加密实在看得头疼，手边没有root的手机没办法进行动态调试，手机未到的这两天先学习一下rsa和des加密。</p>
 
   </article>
   <aside class="table-content" id="site-toc">
@@ -193,7 +187,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Xman冬令营结营赛题目teamfour题解"><span class="toc-text">Xman冬令营结营赛题目teamfour题解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一步：APK文件逆向"><span class="toc-text">第一步：APK文件逆向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二步"><span class="toc-text">第二步</span></a></li></ol></li></ol>
   </div>
 </aside>
   
@@ -202,7 +196,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">http://yoursite.com/passages/hello-world/</a>
+          <a href target="_blank">http://yoursite.com/passages/2019-3-14-Xman-teamfour题解/</a>
         </div>
       
       <div>
@@ -313,10 +307,10 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="/passages/2019-3-13-github-hexo搭建博客/" data-enable="true">
+    <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-3-13-github-hexo搭建博客/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
