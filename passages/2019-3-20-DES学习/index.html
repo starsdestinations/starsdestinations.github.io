@@ -6,7 +6,7 @@
   <meta name="author" content="starsdestinations">
   
   
-  <title>Hexo</title>
+  <title>2019-3-20-DES学习 | Hexo</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -40,7 +40,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-03-13",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "starsdestinations",
     share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
@@ -158,134 +158,71 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="home">
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-03-20
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-3-20-DES学习
+  </h1>
   
-    <div class="home-article-wrapper clearfix">
-      <div class="home-article" data-cover="false">
-        <div class="home-article-inner" data-cover="false">
-          <div class="passage-meta">
-            <span>
-              <i class="fa fa-calendar"></i>2019-03-20
-            </span>
-            
-            
-              <span>
-                | <i class="fa fa-unlock-alt"></i>UNLOCK
-              </span>
-            
-          </div>
-          <h1 class="home-article-title">
-            <a href="/passages/2019-3-20-DES学习/">2019-3-20-DES学习</a>
-          </h1>
-          <div class="home-article-content passage-article">
-            
-              
-            
-          </div>
-          <a class="home-article-read" href="/passages/2019-3-20-DES学习/">
-            README MORE >>>
-          </a>
-          
-        </div>
-        
-      </div>
-    </div>
+  <article class="passage-article">
+    <h1 id="密码学中DES学习"><a href="#密码学中DES学习" class="headerlink" title="密码学中DES学习"></a>密码学中DES学习</h1><h2 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h2><p>双射：既是单射又是满射的映射称为双射，亦称“一一映射”。<br>满射：值域任何元素都有至少有一个变量与之对应，那这个映射就叫做满射<br>单射：函数f被称为是单射时，对每一值域内的y，存在至多一个定义域内的x使得f(x) = y<br>双射的概念在书中介绍DES的函数f时出现</p>
+<p>⊕异或，两边相同时为0，与0异或就是本身，对DES加解密的证明过程有帮助</p>
+<h2 id="DES基础"><a href="#DES基础" class="headerlink" title="DES基础"></a>DES基础</h2><p><img src="/images/2019-3-20-DESlearning/2019-3-20-9-33.png" alt="avatar"><br><img src="/images/2019-3-20-DESlearning/2019-3-20-10-29.png" alt="avatar"><br><img src="/images/2019-3-20-DESlearning/2019-3-20-10-36.png" alt="avatar"><br>这是DES三个最重要的部分，在加解密的过程中，初始置换IP和PC-I是两个表格，比较特殊的是PC-I，PC-I只有56个表项，因为64位密钥实际上其中八的倍数位（初始是第一位）是前七位的奇校验，进行置换的时候会删掉八位校验码。</p>
+<p><img src="/images/2019-3-20-DESlearning/2019-3-20-11-03.png" alt="avatar"><br><img src="/images/2019-3-20-DESlearning/2019-3-20-11-04.png" alt="avatar"><br>函数f：第一步是把32位的Ri根据E-盒进行扩充置换（这一步跟IP和PC-I差不多，只是置换表不一样而已），然后得到48位的结果（因为其中有16位会映射两个结果），之后和Ki（变换i轮后的密钥k）异或，得到的48位结果分成8组，每组都通过S-盒置换（8个S-盒都不一样），最后32位输出会进行一次P置换。</p>
+<p><img src="/images/2019-3-20-DESlearning/2019-3-20-11-05.png" alt="avatar"><br><img src="/images/2019-3-20-DESlearning/2019-3-20-11-06.png" alt="avatar"><br>S-盒比较特殊，是一个4行*16列的查找表（每个项是一个4位二进制数），作为输入的每组的6位二进制数，头尾两位组成的数字作为行数，中间四位组成的数字作为列数（行列都以0为起始值），<br>比如输入1 0100 0，就是查找S-盒的10（头尾两位）行，0100列。<br>函数f中的S-盒引入了非线性，而P置换则引入了扩散，即让每一位明文对更多的密文产生影响，在DES中，16轮加密后每位密文都受到所有64位明文的影响。</p>
+<p>最后是关于加解密为何只需要调换一下Ki的顺序（密钥变化加密的时候是左右两部分向左循环移位，其中1、2、9、16左移一位，其它轮移两位，解密时的Ki就是右移，其中第一轮不移位，2、9、16右移一位，其它轮两位），这里有一个证明公式，配合加解密的图就能看懂了（右上角的d代表解密）<br><img src="/images/2019-3-20-DESlearning/2019-3-20-11-12.png" alt="avatar"><br>⊕异或，两边相同时为0，与0异或就是本身，对没有数学基础的人配合这一点就能理解证明公式最重要的最后一步了</p>
+<h2 id="《深入浅出密码学》第三章学习困惑"><a href="#《深入浅出密码学》第三章学习困惑" class="headerlink" title="《深入浅出密码学》第三章学习困惑"></a>《深入浅出密码学》第三章学习困惑</h2><p><img src="/images/2019-3-20-DESlearning/2019-3-20-10-13.png" alt="avatar"><br>这里有个矛盾之处，上部分说了是左右两部分移位，下面却说要嘛左部分移位，要嘛右部分移位，根据下面说的28次移位后密钥左右各28位的两部分恢复原样判断这里的要嘛应该是翻译错误。<br><img src="/images/2019-3-20-DESlearning/2019-3-20-10-20.png" alt="avatar"><br>这里的Ci和Di应该总共只有56位，感觉还是翻译错误</p>
+<p>最后推荐《深入浅出密码学》这本书，挺适合基础薄弱的人看的，虽然部分数论证明过程还是挺难懂。</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#密码学中DES学习"><span class="toc-text">密码学中DES学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前置基础"><span class="toc-text">前置基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DES基础"><span class="toc-text">DES基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#《深入浅出密码学》第三章学习困惑"><span class="toc-text">《深入浅出密码学》第三章学习困惑</span></a></li></ol></li></ol>
+  </div>
+</aside>
   
-    <div class="home-article-wrapper clearfix">
-      <div class="home-article" data-cover="false">
-        <div class="home-article-inner" data-cover="false">
-          <div class="passage-meta">
-            <span>
-              <i class="fa fa-calendar"></i>2019-03-14
-            </span>
-            
-            
-              <span>
-                | <i class="fa fa-unlock-alt"></i>UNLOCK
-              </span>
-            
-          </div>
-          <h1 class="home-article-title">
-            <a href="/passages/2019-3-14-Xman-teamfour题解/">2019-3-14-Xman-teamfour题解</a>
-          </h1>
-          <div class="home-article-content passage-article">
-            
-              
-            
-          </div>
-          <a class="home-article-read" href="/passages/2019-3-14-Xman-teamfour题解/">
-            README MORE >>>
-          </a>
-          
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-3-20-DES学习/</a>
         </div>
-        
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
       </div>
-    </div>
+    </aside>
   
-    <div class="home-article-wrapper clearfix">
-      <div class="home-article" data-cover="false">
-        <div class="home-article-inner" data-cover="false">
-          <div class="passage-meta">
-            <span>
-              <i class="fa fa-calendar"></i>2019-03-13
-            </span>
-            
-            
-              <span>
-                | <i class="fa fa-unlock-alt"></i>UNLOCK
-              </span>
-            
-          </div>
-          <h1 class="home-article-title">
-            <a href="/passages/2019-3-13-github-hexo搭建博客/">2019-3-13-github+hexo搭建博客</a>
-          </h1>
-          <div class="home-article-content passage-article">
-            
-              
-            
-          </div>
-          <a class="home-article-read" href="/passages/2019-3-13-github-hexo搭建博客/">
-            README MORE >>>
-          </a>
-          
-        </div>
-        
-      </div>
-    </div>
-  
-    <div class="home-article-wrapper clearfix">
-      <div class="home-article" data-cover="false">
-        <div class="home-article-inner" data-cover="false">
-          <div class="passage-meta">
-            <span>
-              <i class="fa fa-calendar"></i>2019-03-13
-            </span>
-            
-            
-              <span>
-                | <i class="fa fa-unlock-alt"></i>UNLOCK
-              </span>
-            
-          </div>
-          <h1 class="home-article-title">
-            <a href="/passages/hello-world/">Hello World</a>
-          </h1>
-          <div class="home-article-content passage-article">
-            
-              
-            
-          </div>
-          <a class="home-article-read" href="/passages/hello-world/">
-            README MORE >>>
-          </a>
-          
-        </div>
-        
-      </div>
-    </div>
   
 </div>
+
     </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
     
     <div class="site-footer-wrapper">
   <footer class="site-footer">
@@ -378,16 +315,16 @@
     <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-3-14-Xman-teamfour题解/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
-      <a href="javascript:void(0);" data-enable="false">
+      <a href="#site-comment" data-enable="true">
         <i class="fa fa-commenting"></i>
       </a>
     
