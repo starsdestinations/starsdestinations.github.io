@@ -6,7 +6,7 @@
   <meta name="author" content="starsdestinations">
   
   
-  <title>归档: 2019 | Hexo</title>
+  <title>2019-3-28-DES一轮差分密码分析 | Hexo</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -40,7 +40,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-03-13",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "starsdestinations",
     share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
@@ -158,43 +158,72 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="timeline">
-  <h2 class="timeline-title">归档: 5篇</h2>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-03-28
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-3-28-DES一轮差分密码分析
+  </h1>
   
-    
-      <h3 class="timeline-subtitle">2019</h3>
-    
-    <div class="timeline-item">
-      <time>2019-03-28</time>
-      <a target="_self" href="/passages/2019-3-28-DES一轮差分密码分析/">2019-3-28-DES一轮差分密码分析</a>
-    </div>
+  <article class="passage-article">
+    <h1 id="DES的差分分析攻击"><a href="#DES的差分分析攻击" class="headerlink" title="DES的差分分析攻击"></a>DES的差分分析攻击</h1><h2 id="差分密码分析介绍"><a href="#差分密码分析介绍" class="headerlink" title="差分密码分析介绍"></a>差分密码分析介绍</h2><p>差分密码分析是已知的攻击迭代密码（迭代一个简单的轮函数，比如DES，就是简单地根据F函数和密钥迭代N轮）最有效的方法之一，基本思想就是用过明文对的异或值对密文对的异或值的影响来还原密钥（也就是已知多对明文和密文，从而推测出密钥）。</p>
+<h2 id="一轮DES的差分密码分析"><a href="#一轮DES的差分密码分析" class="headerlink" title="一轮DES的差分密码分析"></a>一轮DES的差分密码分析</h2><p>接下来用一轮的DES简单地演示一遍差分分析，附带python脚本</p>
+<p>DES的密文是通过上一轮的R（32位），经过E-盒的扩充得到的E（48位），然后E与密钥经过PC-2置换的K（48位）异或后得到I，I经过分割后进入S盒，最终得到O，O经过P-盒置换得到P。（为了推理的简洁，之后的推论过程直接忽略E-盒置换和P-盒置换，因为这两个置换在差分分析的代码中加个逆置换就好了，所以下文中的E就是明文的右半部分，O就是密文的左半边部分）<br>从而得到以下公式<br>E⊕K=I<br>S（I）=O<br>之后我们还需要几个公式<br>就是E’=（E） ⊕ (E#)<br>(E⊕K)⊕（E#⊕K）=（E⊕E#）（K⊕K）=E’<br>(E⊕K)⊕（E#⊕K）=I⊕I#=I’=E’</p>
+<p>其中E和E#就是随机的一对明文，E’就是两者的异或值，同理可以得到I’、O’，在知道一对明文和轮函数（也就是DES的详细加密过程）的情况下，我们就能得到一对密文，从而得到E’、O’，因为K在不同明文的加密过程中是相同的，所以E’=I’，在知道I’、O’的情况下，我们也就能根据S-盒差分对应表得到可能的两个输入I、I#、接着通过已知的E、E#和多个可能的I、I#异或得到可能的K值，最后通过多对明文得到多个K值得集合，它们的唯一交集就是真正的K。</p>
+<p>这里的难点在于O’通过S盒逆查找得到I’是有多种情况的，因为S盒是6位输入变成4位输出，这就造成了缺失，所以我们需要一个差分对应表，差分对应表的详情可以参考我的python代码<br><a href="https://github.com/starsdestinations/DES-differential-cryptanalysis/blob/master/S%E7%9B%92%E5%B7%AE%E5%88%86%E5%80%BC%E5%AF%B9%E5%BA%94%E8%A1%A8python%E5%AE%9E%E7%8E%B0" target="_blank" rel="noopener">https://github.com/starsdestinations/DES-differential-cryptanalysis/blob/master/S%E7%9B%92%E5%B7%AE%E5%88%86%E5%80%BC%E5%AF%B9%E5%BA%94%E8%A1%A8python%E5%AE%9E%E7%8E%B0</a></p>
+<p>我们可以得到一个I’（input）与O’（output）的差分对应表<br><img src="/images/2019-3-28-DES/2019-3-28-21-42.png" alt="avatar"><br>顺便一提的是一对输入I和I#顺序对调后得到的I’是一样的，所以差分对应表中每个项的值都是偶数</p>
+<p>下面进行一次演示，只针对S1盒，所以我们选择两个6位明文<br>假设明文为E=0x13（01 0011） 和E#=0x27（10 0111）<br>得到E’=E ⊕ E# =0x13 ⊕ 0x27=0x34=I’<br>对两个明文进行加密（在不知道密钥的情况下，直接把两个明文放入黑盒DES中加密），得到两个密文，两个密文的O’值为D<br>根据I’ O’查找差分对应表，得到有4对（8种）可能的I值，经过计算得到这六个值为0x06、0x10、0x16、0x1c、0x22、0x24、0x28、0x32<br>把两个明文E和E#分别与这八个可能的I值异或：<br>0x06⊕0x01=0x07    0x06⊕0x35=0x33<br>0x10⊕0x01=0x11    0x10⊕0x35=0x25<br>0x16⊕0x01=0x17    0x16⊕0x35=0x23<br>0x1c⊕0x01=0x1d    0x1c⊕0x35=0x29<br>0x22⊕0x01=0x23    0x22⊕0x35=0x17<br>0x24⊕0x01=0x25    0x24⊕0x35=0x11<br>0x28⊕0x01=0x29    0x28⊕0x35=0x1d<br>0x32⊕0x01=0x33    0x32⊕0x35=0x07<br>将得到的16种可能的K作为一个集合{07，11，17，1d，23，25，29，33}</p>
+<p>接着再选择一对明文，比如21、15，同样的顺序得到可能的K合集{00，14，17，20，23，34}<br>两个集合的交集{17，23}就是K可能取的值</p>
+<p>通过多个明文对一次次的差分分析，最后我们会得到只有一个参数的交集，那个唯一参数就是K值</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DES的差分分析攻击"><span class="toc-text">DES的差分分析攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#差分密码分析介绍"><span class="toc-text">差分密码分析介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一轮DES的差分密码分析"><span class="toc-text">一轮DES的差分密码分析</span></a></li></ol></li></ol>
+  </div>
+</aside>
   
-    
-    <div class="timeline-item">
-      <time>2019-03-20</time>
-      <a target="_self" href="/passages/2019-3-20-DES学习/">2019-3-20-DES学习</a>
-    </div>
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-3-28-DES一轮差分密码分析/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
   
-    
-    <div class="timeline-item">
-      <time>2019-03-14</time>
-      <a target="_self" href="/passages/2019-3-14-Xman-teamfour题解/">2019-3-14-Xman-teamfour题解</a>
-    </div>
-  
-    
-    <div class="timeline-item">
-      <time>2019-03-13</time>
-      <a target="_self" href="/passages/2019-3-13-github-hexo搭建博客/">2019-3-13-github+hexo搭建博客</a>
-    </div>
-  
-    
-    <div class="timeline-item">
-      <time>2019-03-13</time>
-      <a target="_self" href="/passages/hello-world/">Hello World</a>
-    </div>
   
 </div>
+
     </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
     
     <div class="site-footer-wrapper">
   <footer class="site-footer">
@@ -287,16 +316,16 @@
     <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-3-20-DES学习/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
-      <a href="javascript:void(0);" data-enable="false">
+      <a href="#site-comment" data-enable="true">
         <i class="fa fa-commenting"></i>
       </a>
     
