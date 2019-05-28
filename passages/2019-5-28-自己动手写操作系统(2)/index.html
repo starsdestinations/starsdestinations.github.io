@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-5-28-自己动手写操作系统(2) | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-28
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-5-28-自己动手写操作系统(2)
+  </h1>
+  
+  <article class="passage-article">
+    <p>#前言<br>学习完第一章后，成功运行了一个OS版的hello world，第二章主要是讲环境搭建以及之后实验在各种平台可能用到的各种工具，组合五花八门，因为是05年的书，我参考了网上近两年的博客后决定使用linux下的bochs作为之后os的调试工具</p>
+<p>#第一步：安装bochs<br>环境：VM14+Ubuntu16.04</p>
+<p>##1、配置bochs所需环境<br>Bochs 需要在 X11 环境下运行，因此你的 Linux 系统必须已经安装了X Window 系统才能使用Bochs</p>
+<p>关于这一点可以在自己的linux通过ps -e|grep ‘tty’查看，可以看到ubuntu16运行了Xorg，这是X windows的一种（图形用户界面的一种）<br><img src="/images/minisystem/2019-5-28-section2-1.png" alt="avatar"></p>
+<p>因为 Bochs 是用C++写的，所以这里要安装GNU gcc/g++编译器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential </span><br><span class="line">sudo apt-get install xorg-dev </span><br><span class="line">sudo apt-get install bison </span><br><span class="line">sudo apt-get install g++</span><br></pre></td></tr></table></figure></p>
+<p>##2、随后便是安装bochs了<br>先在<a href="https://sourceforge.net/projects/bochs/files/下载压缩文件（其实也可以用sudo" target="_blank" rel="noopener">https://sourceforge.net/projects/bochs/files/下载压缩文件（其实也可以用sudo</a> apt-get install vgabios bochs bochs-x bximage来安装，但缺点是这样安装的bochs默认是不能进行调试的）</p>
+<p>之后解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar zxvf bochs-2.6.9.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>随后进入bochs-2.6.9目录，运行configure脚本，它会测试你的机器，C/C++编译器以及一些库，用来判断何种配置适合于你的机器。运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure --enable-debugger --enable-disasm</span><br></pre></td></tr></table></figure></p>
+<p>（这两个是用来开启调试和反汇编功能）</p>
+<p>第3步正确运行后，会产生一个Makefile文件，然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make</span><br></pre></td></tr></table></figure></p>
+<p>最后安装bochs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
+<p>安装成功后就可以在终端内输入bochs启动了<br><img src="/images/minisystem/2019-5-28-section2-2.png" alt="avatar"></p>
+<p>##3、bochs2.6.9运行遇到的各种错误及解决方法<br>这里运行成功，但是最后却报错了，安装过程应该没问题，但是配置出现了错误，因此修改bochsrc文件(能运行bochs但出错了，基本都是配置的错误)<br>先备份bochrc<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./.bochsrc /home/stars/bochsrc.bak</span><br></pre></td></tr></table></figure></p>
+<p>根据报错信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">00000000000e[      ] .bochsrc:187: wrong value for parameter &apos;model&apos;</span><br><span class="line">00000000000p[      ] &gt;&gt;PANIC&lt;&lt; .bochsrc:187: cpu directive malformed.</span><br></pre></td></tr></table></figure></p>
+<p>可见是cpu的model设置错了<br>解决方法如下：<br>先查看bochs有哪些cpu model<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bochs -help cpu</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/minisystem/2019-5-28-section2-3.png" alt="avatar"><br>因为我的cpu是intel core所以我把cpu model改成core_duo_t2400_yonah<br><img src="/images/minisystem/2019-5-28-section2-4.png" alt="avatar"><br>注释内容是默认配置</p>
+<p>修改配置后又遇到了新的错误:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.bochsrc:915: Bochs is not compiled with lowlevel sound support</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/minisystem/2019-5-28-section2-5.png" alt="avatar"><br>解决方法如下：<br>注释掉915行的sound（vim小技巧, : n 可以直接跳到第n行）<br><img src="/images/minisystem/2019-5-28-section2-6.png" alt="avatar"></p>
+<p>再次运行bochs<br><img src="/images/minisystem/2019-5-28-section2-7.png" alt="avatar"><br>成功运行</p>
+<p>安装步骤参考<a href="https://www.linuxidc.com/Linux/2016-10/135905.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2016-10/135905.htm</a><br>错误调试步骤参考<a href="https://www.cnblogs.com/lr-ting/p/10585836.html" target="_blank" rel="noopener">https://www.cnblogs.com/lr-ting/p/10585836.html</a></p>
+<p>#第二步：在bochs上加载img<br>首先是在**/bochs-2.6.9目录下创建新目录minios，然后把要运行的镜像boot.img拷贝进去<br>随后在minios目录下创建配置文件bochsrc<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim bochsrc</span><br></pre></td></tr></table></figure></p>
+<p>配置内容如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#注意&apos;#&apos;后面为注注释内容</span><br><span class="line"></span><br><span class="line">#模拟器的内存 </span><br><span class="line">megs:128</span><br><span class="line"></span><br><span class="line">#这个是BIOS-bochs-latest的路径,自己慢慢找,不一定和我的一样</span><br><span class="line">romimage:file=/usr/local/share/bochs/BIOS-bochs-latest</span><br><span class="line"></span><br><span class="line">#这个是VGABIOS-lgpl-latest的路径,自己慢慢找</span><br><span class="line">vgaromimage:file=/usr/local/share/bochs/VGABIOS-lgpl-latest </span><br><span class="line"></span><br><span class="line">#这个是启动软盘,就是我们下载的那个,就在当前目录下，如果不在当前目录，需要指明路径 </span><br><span class="line">floppya:1_44=boot.img,status=inserted</span><br><span class="line"></span><br><span class="line">#表示从软盘启动</span><br><span class="line">boot:floppy </span><br><span class="line"></span><br><span class="line">#日志输出文件</span><br><span class="line">log:bochsout.txt </span><br><span class="line"></span><br><span class="line">#选项还有很多,想了解更多可以参照原始的.bochsrc文件（在bochs-2.6.9/目录下）</span><br></pre></td></tr></table></figure></p>
+<p>配置文件写好后就执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bochs -f bochsrc （-f 选项表示指定配置文件，后面跟着我们刚写好的配置文件名）</span><br></pre></td></tr></table></figure></p>
+<p>之后输入c，也就是continue，就能运行boot.img<br><img src="/images/minisystem/2019-5-28-section2-8.png" alt="avatar"><br>可以看到虚拟机界面左上角出现了hello world，运行成功，之所以界面很乱，是因为我们的boot.img只是在屏幕的左上角显示hello world，在此之前并没有清空屏幕，所以bochs初始化遗留的内容还保留在屏幕上</p>
+<p>在加载虚拟机之前<br>[0x0000fffffff0] f000:fff0 (unk. ctxt): jmpf 0xf000:e05b          ; ea5be000f0<br>其中jmpf 0xf000:e05b指的是跳转到ROM-BIOS的地址，随后我们输入c，才会加载镜像。</p>
+<p>加载boot.img镜像的步骤参考自<a href="https://blog.csdn.net/the_chosen_1/article/details/88918766#linux011_48" target="_blank" rel="noopener">https://blog.csdn.net/the_chosen_1/article/details/88918766#linux011_48</a></p>
+<p>明天第三章的内容包括用bochs安装freedos镜像，从而调试pmtest1.com以及实模式和保护模式的学习</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-5-28-自己动手写操作系统(2)/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-5-28-自己动手写操作系统(1)/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
