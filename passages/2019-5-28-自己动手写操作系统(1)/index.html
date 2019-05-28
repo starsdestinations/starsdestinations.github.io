@@ -6,7 +6,7 @@
   <meta name="author" content="starsdestinations">
   
   
-  <title>归档: 2019/3 | Hexo</title>
+  <title>2019-5-28-自己动手写操作系统(1) | Hexo</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -40,7 +40,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-03-13",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "starsdestinations",
     share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
@@ -158,49 +158,74 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="timeline">
-  <h2 class="timeline-title">归档: 12篇</h2>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-28
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-5-28-自己动手写操作系统(1)
+  </h1>
   
+  <article class="passage-article">
+    <p>#前言<br>期末了，学校的操作系统课需要提交课程设计，想想这学期课程做的五个实验，dhcp、dns、web、ftp、email服务器搭建，实在不知道学校在教什么，所以决定自学写一个操作系统，自己写一个操作系统应该也是很多新手程序员的浪漫理想吧，接下来就是针对《自己动手写操作系统》的学习笔记，全书分为7章，因此也预计七天学完。</p>
+<p>#第一天：第一章-马上动手写一个最小的“操作系统”<br>开发环境：<br>win10<br>VM14+ubuntu16.04</p>
+<p>之后是实验步骤</p>
+<p>##1、准备汇编编译器编译 nasm<br>sudo apt-get install nasm</p>
+<p>##2、编译boot.asm<br>在windows上用notepad++直接写一个boot.asm然后复制到ubuntu中（懒得安装中文输入法了）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">	org 07c00h			;告速编译器程序加载到7c00处</span><br><span class="line">	mov ax,cs</span><br><span class="line">	mov ds,ax</span><br><span class="line">	mov es,ax</span><br><span class="line">	call DispStr		;调用显示字符串例程</span><br><span class="line">	jmp $				;无限循环,$表示当前地址,也就是jmp $的地址</span><br><span class="line">DispStr:</span><br><span class="line">	mov ax,BootMessage</span><br><span class="line">	mov bp,ax			;es:bp = 串地址</span><br><span class="line">	mov cx,16			;cx = 串长度</span><br><span class="line">	mov ax,01301h		;ah = 13, al = 01h</span><br><span class="line">	mov bx,000ch		;页号为0(bh = 0)黑底红字(b1=0Ch,高亮)</span><br><span class="line">	mov dl,0</span><br><span class="line">	int 10h				;10h 号中断</span><br><span class="line">	ret</span><br><span class="line">BootMessage:		db	&quot;Hello, OS world!&quot;</span><br><span class="line">times 510-($-$$)	db	0		;填充剩下的空间，使生成的二进制代码恰好为512字节</span><br><span class="line">								;$$表示当前节(section)起始地址</span><br><span class="line">								;在这个只有一节的程序中就是org 07c00h的地址</span><br><span class="line">								;所以$$-$就是该段程序从起始到time 510-($-$$)的长度</span><br><span class="line">								;加上最后的dw 0xaa55就是512字节</span><br><span class="line">dw 0xaa55						;结束标志</span><br></pre></td></tr></table></figure></p>
+<p>然后编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nasm boot.asm -o boot.bin</span><br></pre></td></tr></table></figure></p>
+<p>##3、制作软盘（系统启动盘）<br>空白软盘 这种上古玩意大概只有老师才有了，如今可以使用dd命令制作虚拟软盘<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if=boot.bin of=boot.img</span><br></pre></td></tr></table></figure></p>
+<p>参数含义：<br>if=文件名：输入文件名，缺省为标准输入。即指定源文件。&lt; if=input file &gt;<br>of=文件名：输出文件名，缺省为标准输出。即指定目的文件。&lt; of=output file &gt;<br>更多参数可以参考<a href="https://www.cnblogs.com/jikexianfeng/p/6103500.html" target="_blank" rel="noopener">https://www.cnblogs.com/jikexianfeng/p/6103500.html</a><br>将得到的boot.img从虚拟机复制到windows中</p>
+<p>##4、通过VM的空白虚拟机加载boot.img<br>在VM中创建空白的虚拟机，虚拟机类型我选择其它<br><img src="/images/minisystem/2019-5-28-section1-1.png" alt="avatar"><br>随后在设置中把cd/dvd和网络适配器的自动连接去掉<br><img src="/images/minisystem/2019-5-28-section1-4.png" alt="avatar"><br>之后添加软盘驱动器<br><img src="/images/minisystem/2019-5-28-section1-2.png" alt="avatar"><br>最后在使用软盘映像文件中选择boot.img<br><img src="/images/minisystem/2019-5-28-section1-3.png" alt="avatar"><br>打开虚拟机，实验成功！我们踏出了第一步<br><img src="/images/minisystem/2019-5-28-section1-5.png" alt="avatar"></p>
+<p>在编译过程中可能遇到 label or instruction expected at start of line，基本是格式或者编码的问题，自己手打一遍代码，注意空格和tab是不一样的。</p>
+<p>以上实验步骤参考了<br><a href="https://blog.csdn.net/zashizhi3299/article/details/80870073" target="_blank" rel="noopener">https://blog.csdn.net/zashizhi3299/article/details/80870073</a> 中的空白虚拟机加载虚拟软盘<br><a href="https://blog.csdn.net/YuDale/article/details/65644241" target="_blank" rel="noopener">https://blog.csdn.net/YuDale/article/details/65644241</a> 中的虚拟软盘创建</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
     
-      <h3 class="timeline-subtitle">2019</h3>
-    
-    <div class="timeline-item">
-      <time>2019-03-31</time>
-      <a target="_self" href="/passages/2019-3-31-上海嘉韦思杯wp-re/">2019-3-31-上海嘉韦思杯wp-re</a>
-    </div>
+  </div>
+</aside>
   
-    
-    <div class="timeline-item">
-      <time>2019-03-28</time>
-      <a target="_self" href="/passages/2019-3-28-DES一轮差分密码分析/">2019-3-28-DES一轮差分密码分析</a>
-    </div>
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/passages/2019-5-28-自己动手写操作系统(1)/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
   
-    
-    <div class="timeline-item">
-      <time>2019-03-20</time>
-      <a target="_self" href="/passages/2019-3-20-DES学习/">2019-3-20-DES学习</a>
-    </div>
-  
-    
-    <div class="timeline-item">
-      <time>2019-03-14</time>
-      <a target="_self" href="/passages/2019-3-14-Xman-teamfour题解/">2019-3-14-Xman-teamfour题解</a>
-    </div>
-  
-    
-    <div class="timeline-item">
-      <time>2019-03-13</time>
-      <a target="_self" href="/passages/2019-3-13-github-hexo搭建博客/">2019-3-13-github+hexo搭建博客</a>
-    </div>
-  
-    
-    <div class="timeline-item">
-      <time>2019-03-13</time>
-      <a target="_self" href="/passages/hello-world/">Hello World</a>
-    </div>
   
 </div>
+
     </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
     
     <div class="site-footer-wrapper">
   <footer class="site-footer">
@@ -293,16 +318,16 @@
     <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-4-21-第十二届全国信息竞赛预赛/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
-      <a href="javascript:void(0);" data-enable="false">
+      <a href="#site-comment" data-enable="true">
         <i class="fa fa-commenting"></i>
       </a>
     
