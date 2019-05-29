@@ -176,14 +176,12 @@
   </h1>
   
   <article class="passage-article">
-    <p>#前言：<br>一遍自己写简易的操作系统，一遍阅读《程序员的自我修养》了解操作系统，越发地体会到操作系统的复杂。今天为了之后实验更方便地进行调试，还需要安装一个X86的dos。</p>
-<p>#第一步：配置freedos</p>
-<p>##1、下载freedos<br>在<a href="http://bochs.sourceforge.net/guestos/freedos-img.tar.gz上面下载FreeDos" target="_blank" rel="noopener">http://bochs.sourceforge.net/guestos/freedos-img.tar.gz上面下载FreeDos</a></p>
-<p>##2、创建镜像<br>bochs可以通过bximage命令快捷地创建镜像<br><img src="/images/minisystem/2019-5-29-section3-1.png" alt="avatar"><br>其中红框部分就是要需要输入的，分别是选择功能、选择创建硬盘(hd)还是软盘(fd)镜像、设置软盘镜像大小、命名(pm.img)。<br>随后将下载好的freedos解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar vxzf freedos-img.tar.gz</span><br></pre></td></tr></table></figure></p>
+    <h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>一边自己写简易的操作系统，一边阅读《程序员的自我修养》了解操作系统，越发地体会到操作系统的复杂。今天为了之后实验更方便地进行调试，还需要安装一个X86的dos。</p>
+<h1 id="第一步：配置freedos"><a href="#第一步：配置freedos" class="headerlink" title="第一步：配置freedos"></a>第一步：配置freedos</h1><h2 id="1、下载freedos"><a href="#1、下载freedos" class="headerlink" title="1、下载freedos"></a>1、下载freedos</h2><p>在<a href="http://bochs.sourceforge.net/guestos/freedos-img.tar.gz上面下载FreeDos" target="_blank" rel="noopener">http://bochs.sourceforge.net/guestos/freedos-img.tar.gz上面下载FreeDos</a></p>
+<h2 id="2、创建镜像"><a href="#2、创建镜像" class="headerlink" title="2、创建镜像"></a>2、创建镜像</h2><p>bochs可以通过bximage命令快捷地创建镜像<br><img src="/images/minisystem/2019-5-29-section3-1.png" alt="avatar"><br>其中红框部分就是要需要输入的，分别是选择功能、选择创建硬盘(hd)还是软盘(fd)镜像、设置软盘镜像大小、命名(pm.img)。<br>随后将下载好的freedos解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar vxzf freedos-img.tar.gz</span><br></pre></td></tr></table></figure></p>
 <p>将解压得到的a.img改名成freedos.img，和上一步创建的pm.img放在同一个工作目录下<br>之后可以将freedos解压文件中的bochsrc直接复制到该文件，然后修改部分配置选项<br><img src="/images/minisystem/2019-5-29-section3-2.png" alt="avatar"><br>接着启动bochs<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bochs  -f  bochsrc</span><br></pre></td></tr></table></figure></p>
 <p>启动后格式化b盘，然后退出bochs<br><img src="/images/minisystem/2019-5-29-section3-3.png" alt="avatar"></p>
-<p>#第二步：编译pmtest1.asm</p>
-
+<h1 id="第二步：编译pmtest1-asm"><a href="#第二步：编译pmtest1-asm" class="headerlink" title="第二步：编译pmtest1.asm"></a>第二步：编译pmtest1.asm</h1>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -191,7 +189,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言："><span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第一步：配置freedos"><span class="toc-text">第一步：配置freedos</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、下载freedos"><span class="toc-text">1、下载freedos</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、创建镜像"><span class="toc-text">2、创建镜像</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第二步：编译pmtest1-asm"><span class="toc-text">第二步：编译pmtest1.asm</span></a></li></ol>
   </div>
 </aside>
   
