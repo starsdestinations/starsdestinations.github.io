@@ -202,7 +202,6 @@
 <p>之后输入c，也就是continue，就能运行boot.img<br><img src="/images/minisystem/2019-5-28-section2-8.png" alt="avatar"><br>可以看到虚拟机界面左上角出现了hello world，运行成功，之所以界面很乱，是因为我们的boot.img只是在屏幕的左上角显示hello world，在此之前并没有清空屏幕，所以bochs初始化遗留的内容还保留在屏幕上</p>
 <p>在加载虚拟机之前<br>[0x0000fffffff0] f000:fff0 (unk. ctxt): jmpf 0xf000:e05b          ; ea5be000f0<br>其中jmpf 0xf000:e05b指的是跳转到ROM-BIOS的地址，随后我们输入c，才会加载镜像。</p>
 <p>加载boot.img镜像的步骤参考自<a href="https://blog.csdn.net/the_chosen_1/article/details/88918766#linux011_48" target="_blank" rel="noopener">https://blog.csdn.net/the_chosen_1/article/details/88918766#linux011_48</a></p>
-<p>明天第三章的内容包括用bochs安装freedos镜像，从而调试pmtest1.com以及实模式和保护模式的学习</p>
 
   </article>
   <aside class="table-content" id="site-toc">
@@ -331,7 +330,7 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-5-29-自己动手写操作系统(3)/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
     <a href="/passages/2019-5-28-自己动手写操作系统(1)/" data-enable="true">
