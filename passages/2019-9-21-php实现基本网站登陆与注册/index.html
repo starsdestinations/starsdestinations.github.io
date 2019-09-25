@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-9-21-php实现基本网站登陆与注册 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-21
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-9-21-php实现基本网站登陆与注册
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="php实现基本网站登陆与注册"><a href="#php实现基本网站登陆与注册" class="headerlink" title="php实现基本网站登陆与注册"></a>php实现基本网站登陆与注册</h1><p>基于win7虚拟机+phpstudy</p>
+<h2 id="创建注册与登陆html页面"><a href="#创建注册与登陆html页面" class="headerlink" title="创建注册与登陆html页面"></a>创建注册与登陆html页面</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=utf-8"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>登录界面<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"login.php"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">账号：</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"usernamel"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">密码：</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"passwordl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"登录"</span> <span class="attr">name</span>=<span class="string">"subl"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.shixun.com/register.html"</span>&gt;</span>没有账号，注册<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=utf-8"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>注册界面<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"register.php"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">姓名：<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">年龄：<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"userage"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">性别：<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"usersex"</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">value</span>=<span class="string">"0"</span> /&gt;</span>男 </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"usersex"</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">value</span>=<span class="string">"1"</span> /&gt;</span>女 </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"usersex"</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">value</span>=<span class="string">"2"</span> /&gt;</span>其它 </span><br><span class="line"><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">身份信息：<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"userid"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">账号：<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"id"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">密码:<span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">br</span>/&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"注册"</span> <span class="attr">name</span>=<span class="string">"sub"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="注册和登陆检查-php（连接mysql数据库）"><a href="#注册和登陆检查-php（连接mysql数据库）" class="headerlink" title="注册和登陆检查-php（连接mysql数据库）"></a>注册和登陆检查-php（连接mysql数据库）</h2><p>登陆检查php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">header(<span class="string">"Content-type:text/html;charset=utf-8"</span>);</span><br><span class="line"></span><br><span class="line">$link=mysql_connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"root"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($link)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  $select=mysql_select_db(<span class="string">"login"</span>,$link);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>($select)</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">"subl"</span>]))</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">      $name=$_POST[<span class="string">"usernamel"</span>];</span><br><span class="line"></span><br><span class="line">      $password=$_POST[<span class="string">"passwordl"</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>($name==<span class="string">""</span>||$password==<span class="string">""</span>)<span class="comment">//判断是否为空</span></span><br><span class="line"></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"请填写正确的信息！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/login.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      $str=<span class="string">"select password from register where id="</span>.<span class="string">"'"</span>.<span class="string">"$name"</span>.<span class="string">"'"</span>;</span><br><span class="line"></span><br><span class="line">      mysql_query(<span class="string">'SET NAMES UTF8'</span>);</span><br><span class="line">	  </span><br><span class="line">	  $result=mysql_query($str,$link);</span><br><span class="line"></span><br><span class="line">      $pass=mysql_fetch_row($result);</span><br><span class="line"></span><br><span class="line">      $pa=$pass[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>($pa==$password)<span class="comment">//判断密码与注册时密码是否一致</span></span><br><span class="line"></span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">echo</span><span class="string">"登录成功！"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">	  <span class="keyword">else</span></span><br><span class="line">      &#123;  </span><br><span class="line">        <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"登录失败！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/login.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注册检查</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$link=mysql_connect(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"root"</span>);<span class="comment">//链接数据库</span></span><br><span class="line"></span><br><span class="line">header(<span class="string">"Content-type:text/html;charset=utf-8"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($link)</span><br><span class="line"></span><br><span class="line">  &#123;  </span><br><span class="line"></span><br><span class="line">    <span class="comment">//echo"链接数据库成功";</span></span><br><span class="line"></span><br><span class="line">    $select=mysql_select_db(<span class="string">"login"</span>,$link);<span class="comment">//选择数据库</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($select)</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//echo"选择数据库成功！";</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">"sub"</span>]))</span><br><span class="line"></span><br><span class="line">      &#123;</span><br><span class="line">		<span class="comment">//获取表单数据</span></span><br><span class="line">		$username=$_POST[<span class="string">"username"</span>];<span class="comment">//获取姓名</span></span><br><span class="line">		</span><br><span class="line">		$userage=$_POST[<span class="string">"userage"</span>];<span class="comment">//获取年龄</span></span><br><span class="line">		</span><br><span class="line">		$usersex=$_POST[<span class="string">"usersex"</span>];<span class="comment">//获取性别</span></span><br><span class="line">		</span><br><span class="line">		$userid=$_POST[<span class="string">"userid"</span>];<span class="comment">//获取身份信息</span></span><br><span class="line">		</span><br><span class="line">        $id=$_POST[<span class="string">"id"</span>];<span class="comment">//获取账号</span></span><br><span class="line"></span><br><span class="line">        $password=$_POST[<span class="string">"password"</span>];<span class="comment">//获取密码</span></span><br><span class="line">        <span class="keyword">if</span>($username==<span class="string">""</span>||$userage==<span class="string">""</span>||$usersex==<span class="string">""</span>||$userid==<span class="string">""</span>||$id==<span class="string">""</span>||$password==<span class="string">""</span>)<span class="comment">//判断是否填写</span></span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"请填写完成！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/register.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;   </span><br><span class="line">          </span><br><span class="line">		  <span class="keyword">exit</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">		$regex = <span class="string">"/\/|\~|\!|\@|\#|\\$|\%|\^|\&amp;|\*|\(|\)|\_|\+|\&#123;|\&#125;|\:|\&lt;|\&gt;|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|/"</span>;</span><br><span class="line">        <span class="keyword">if</span>(preg_match($regex,$username))</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line">			<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"姓名不能有特殊字符！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/register.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">exit</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(!is_numeric($userage)||$userage&gt;<span class="number">150</span>||$userage&lt;<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"年龄请输入数字且在1-150之间！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">exit</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(!preg_match(<span class="string">"/^\d*$/"</span>,$userid)||strlen($userid)!=<span class="number">18</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"身份信息请输入数字且为18位！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">exit</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(preg_match($regex,$password)||strlen($password)&lt;=<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line">			<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"密码不能有特殊字符且大于6位！"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/register.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">exit</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		$str=<span class="string">"select count(*) from register where id="</span>.<span class="string">"'"</span>.<span class="string">"$id"</span>.<span class="string">"'"</span>;</span><br><span class="line"></span><br><span class="line">		$result=mysql_query($str,$link);</span><br><span class="line"></span><br><span class="line">		$pass=mysql_fetch_row($result);</span><br><span class="line"></span><br><span class="line">		$pa=$pass[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>($pa==<span class="number">1</span>)<span class="comment">//判断数据库表中是否已存在该用户名</span></span><br><span class="line"></span><br><span class="line">		&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.alert"</span>.<span class="string">"("</span>.<span class="string">"\""</span>.<span class="string">"该用户名已被注册"</span>.<span class="string">"\""</span>.<span class="string">")"</span>.<span class="string">";"</span>.<span class="string">"&lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">echo</span><span class="string">"&lt;script type="</span>.<span class="string">"\""</span>.<span class="string">"text/javascript"</span>.<span class="string">"\""</span>.<span class="string">"&gt;"</span>.<span class="string">"window.location="</span>.<span class="string">"\""</span>.<span class="string">"http://www.shixun.com/register.html"</span>.<span class="string">"\""</span>.<span class="string">"&lt;/script&gt;"</span>;   </span><br><span class="line"></span><br><span class="line">		<span class="keyword">exit</span>; </span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"username:"</span>.<span class="string">"$username"</span>;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"userage:"</span>.<span class="string">"$userage"</span>;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"usersex:"</span>.<span class="string">"$usersex"</span>;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"userid:"</span>.<span class="string">"$userid"</span>;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"id:"</span>.<span class="string">"$id"</span>;</span><br><span class="line">		<span class="keyword">echo</span><span class="string">"password:"</span>.<span class="string">"$password"</span>;</span><br><span class="line">		</span><br><span class="line">		$age=(int)$userage;</span><br><span class="line">		$sex=(int)$usersex;</span><br><span class="line">		</span><br><span class="line">		$sql=<span class="string">"insert into register values("</span>.<span class="string">"\""</span>.<span class="string">"$username"</span>.<span class="string">"\""</span>.<span class="string">","</span>.<span class="string">"\""</span>.<span class="string">"$age"</span>.<span class="string">"\""</span>.<span class="string">","</span>.<span class="string">"\""</span>.<span class="string">"$sex"</span>.<span class="string">"\""</span>.<span class="string">","</span>.<span class="string">"\""</span>.<span class="string">"$userid"</span>.<span class="string">"\""</span>.<span class="string">","</span>.<span class="string">"\""</span>.<span class="string">"$id"</span>.<span class="string">"\""</span>.<span class="string">","</span>.<span class="string">"\""</span>.<span class="string">"$password"</span>.<span class="string">"\""</span>.<span class="string">")"</span>;</span><br><span class="line">		<span class="comment">//将注册信息插入数据库表中	 </span></span><br><span class="line">		mysql_query($sql,$link);</span><br><span class="line">			 </span><br><span class="line">		mysql_query(<span class="string">'SET NAMES UTF8'</span>);</span><br><span class="line">		</span><br><span class="line">		$close=mysql_close($link);</span><br><span class="line">          </span><br><span class="line">		<span class="keyword">if</span>($close)</span><br><span class="line">		&#123;</span><br><span class="line">		  <span class="keyword">echo</span><span class="string">"数据库关闭"</span>;</span><br><span class="line">		  <span class="keyword">echo</span><span class="string">"注册成功！"</span>;  </span><br><span class="line">		&#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>知识点：</p>
+<p>1、php-echo中 . 能连接两个“”字符串，并且echo出js脚本的时候能够执行js。</p>
+<p>2、preg_match（），前一个参数可以是正则表达式，后一个参数是字符串</p>
+<p>3、”//|~|!|@|#|\$|%|^|&amp;|*|(|)|_|+|{|}|:|&lt;|&gt;|?|[|]|,|.|/|;|&#39;|`|-|=|\||/“判断包含特殊字符的正则表达式</p>
+<p>4、”/^\d*$/“判断字符串是否是纯数字的正则表达式</p>
+<p>5、mysql命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database login；#创建login数据库</span><br><span class="line">use login</span><br><span class="line">create table register(username varchar(20),userage int,usersex int,userid varchar(18),id varchar(20),password varchar(20));#创建register表</span><br></pre></td></tr></table></figure>
+
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#php实现基本网站登陆与注册"><span class="toc-text">php实现基本网站登陆与注册</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建注册与登陆html页面"><span class="toc-text">创建注册与登陆html页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注册和登陆检查-php（连接mysql数据库）"><span class="toc-text">注册和登陆检查-php（连接mysql数据库）</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-9-21-php实现基本网站登陆与注册/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-9-17-伪基站搭建OPENBSC+USRPB210/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

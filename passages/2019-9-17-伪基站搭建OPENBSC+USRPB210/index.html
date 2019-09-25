@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-9-17-伪基站搭建OPENBSC+USRPB210 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-17
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-9-17-伪基站搭建OPENBSC+USRPB210
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="伪基站搭建"><a href="#伪基站搭建" class="headerlink" title="伪基站搭建"></a>伪基站搭建</h1><h2 id="环境和前言"><a href="#环境和前言" class="headerlink" title="环境和前言"></a>环境和前言</h2><p>目前2G基站逐渐消失，本次实验纯粹为了研究，请勿用于非法用途！</p>
+<p>系统环境：VM14+ubuntu16.04.3</p>
+<p>硬件：USRP-B210</p>
+<p>在查找伪基站搭建的资料时，发现了两个项目，OPENBTS和OPENBSC，搭建OPENBTS失败后决定改成搭建OPENBSC环境（OPENBTS最后失败在启动OPENBTS时找不到./transceiver，到相关路径下查看只找到transceiver.o和transceiver.c两个中间文件和源文件，估计是编译时候出错了，找不到相关错误也懒得看makefile文件所以就换成搭建OPENBSC）</p>
+<p>这是OPENBSC的大体架构:</p>
+<p><img src="/images/%E4%BC%AA%E5%9F%BA%E7%AB%99/OPENBSC%E7%BB%93%E6%9E%84%E5%9B%BE.PNG" alt="OPENBSC结构图"></p>
+<p>要想实现最基本的伪基站通信，就需要安装三个组件，OsmoTRX、OsmoBTS、OsmoNITB</p>
+<h2 id="安装OpenBSC"><a href="#安装OpenBSC" class="headerlink" title="安装OpenBSC"></a>安装OpenBSC</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$mkdir</span> openbsc</span><br><span class="line"><span class="variable">$cd</span> openbsc</span><br><span class="line"><span class="comment">#下载OPENBSC源码</span></span><br><span class="line">$ git <span class="built_in">clone</span> git://git.osmocom.org/openbsc.git</span><br><span class="line"><span class="comment">#安装必要的环境库</span></span><br><span class="line">$ sudo apt install libdbi-dev libdbd-sqlite3 libortp-dev build-essential libtool autoconf autoconf-archive automake git-core pkg-config libtalloc-dev libpcsclite-dev libpcap-dev</span><br><span class="line"><span class="comment">#在安装过程中报错No package 'gnutls' found，本来想下个gnutls，发现特别麻烦，仔细看了下文档，发现ubuntu16.10不用下的libgnutls28-dev和libsctp-dev在16.04可能需要下，所以需要添加两个命令</span></span><br><span class="line">sudo apt-get install libgnutls28-dev</span><br><span class="line">sudo apt-get install libsctp-dev</span><br><span class="line"><span class="comment">#之后按顺序安装libosmocore、libosmo-abis、libosmo-netif、openbsc，openbsc的区别是第二条命令是cd openbsc/openbsc</span></span><br><span class="line"><span class="comment">#以libosmocore为例：</span></span><br><span class="line"><span class="comment">#start---------</span></span><br><span class="line"><span class="variable">$git</span> <span class="built_in">clone</span> git://git.osmocom.org/libosmocore</span><br><span class="line"><span class="variable">$cd</span> libosmocore</span><br><span class="line"><span class="variable">$autoreconf</span> -<span class="keyword">fi</span></span><br><span class="line">$./configure</span><br><span class="line"><span class="variable">$make</span> -j5</span><br><span class="line"><span class="variable">$make</span> check</span><br><span class="line"><span class="variable">$sudo</span> make install</span><br><span class="line"><span class="variable">$sudo</span> ldconfig</span><br><span class="line"><span class="variable">$cd</span> ..</span><br><span class="line"><span class="comment">#end------------</span></span><br><span class="line"><span class="comment">#make install的时候创建出现了cannot create directory ‘/usr/local/include/osmocom’: Permission denied，可以用sudo make install解决</span></span><br><span class="line"><span class="comment">#安装openbsc时在autoreconf -fi步骤可能报错tests/bsc-nat-trie/Makefile.am:9: warning: source file '$(top_srcdir)/src/osmo-bsc_nat/bsc_nat_rewrite_trie.c' is in a subdirectory，不用管</span></span><br></pre></td></tr></table></figure>
+
+<p>ldconfig这个命令最近安装的时候经常见到，但我却不知道它的意思，这里记录一下：</p>
+<p>为了让动态链接库为系统所共享,还需运行动态链接库的管理命令–ldconfig。ldconfig通常在系统启动时运行,而当用户安装了一个新的动态链接库时,就需要手工运行这个命令.</p>
+<p>详细安装过程可以看<a href="https://osmocom.org/projects/cellular-infrastructure/wiki/Build_from_Source" target="_blank" rel="noopener">https://osmocom.org/projects/cellular-infrastructure/wiki/Build_from_Source</a></p>
+<h2 id="安装-OsmoTRX"><a href="#安装-OsmoTRX" class="headerlink" title="安装 OsmoTRX"></a>安装 OsmoTRX</h2><p>安装步骤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install --no-install-recommends libusb-1.0-0-dev libboost-dev</span><br><span class="line">$ sudo apt-get install libuhd-dev uhd-host</span><br><span class="line">$ git <span class="built_in">clone</span> git://git.osmocom.org/osmo-trx</span><br><span class="line">$ <span class="built_in">cd</span> osmo-trx</span><br><span class="line">$ autoreconf -i</span><br><span class="line"><span class="comment">#因为我用的usrp，所以使用--with-uhd</span></span><br><span class="line">$ ./configure --with-uhd</span><br><span class="line">$ make</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>如果是用usrp需要提前安装好UHD，详细安装过程可以看<a href="https://osmocom.org/projects/osmotrx/wiki/OsmoTRX" target="_blank" rel="noopener">https://osmocom.org/projects/osmotrx/wiki/OsmoTRX</a></p>
+<h2 id="安装OsmoBTS"><a href="#安装OsmoBTS" class="headerlink" title="安装OsmoBTS"></a>安装OsmoBTS</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git://git.osmocom.org/osmo-bts.git</span><br><span class="line">$ <span class="built_in">cd</span> osmo-bts</span><br><span class="line">$ autoreconf -i</span><br><span class="line">$ ./configure --<span class="built_in">enable</span>-trx</span><br><span class="line">$ make</span><br><span class="line">$ make check</span><br><span class="line">$ sudo make install</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行openBSC"><a href="#运行openBSC" class="headerlink" title="运行openBSC"></a>运行openBSC</h2><p>安装好所有组件后需要打开四个窗口分别运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo osmo-trx-uhd -C ./osmo-trx/doc/examples/osmo-trx-uhd/osmo-trx-uhd.cfg</span><br><span class="line">$ sudo osmo-nitb -c ./cellular-network-configs/osmocom/openbsc.cfg</span><br><span class="line">$ sudo osmo-bts-trx -c ./cellular-network-configs/osmocom/osmo-bts.cfg</span><br><span class="line">$ sudo telnet localhost 4242</span><br></pre></td></tr></table></figure>
+
+<p>这里大概解释一下：</p>
+<p>OsmoTRX作为BTS的物理层，主要负责接收SDR传过来的原始信号，然后解析成报文。</p>
+<p>OsmoBTS相当于一个基站控制器，负责与OsmoTRX进行通信，完成基站的各种操作。</p>
+<p>OsmoNITB负责与OsmoBTS通信，用户通过OsmoNITB对基站下达指令。</p>
+<p>不加-c或者-C参数会调用默认配置，但默认配置总是出错（比如默认配置文件找不到，或者运行后不同组件之间无法正常通信），所以我找到github上的<a href="https://github.com/myriadrf" target="_blank" rel="noopener">myriadrf</a>/cellular-network-configs项目</p>
+<p>虽然这个项目是基于limeSDR的，但我认为硬件只会影响到SDR与osmotrx之间的通信接口，所以osmotrx用初始的uhd配置文件，而其它两个用cellular-network-configs项目里的配置文件。</p>
+<p>最后也是成功运行起来。</p>
+<p><img src="/images/%E4%BC%AA%E5%9F%BA%E7%AB%99/OPENBSC%E8%BF%90%E8%A1%8C.PNG" alt="OPENBSC运行"></p>
+<p>如图是四个终端，左上是osmo-trx-uhd，右上是osmo-nitb，右下是osmo-bts-trx，左下是telnet。</p>
+<h2 id="使用openBSC"><a href="#使用openBSC" class="headerlink" title="使用openBSC"></a>使用openBSC</h2><p>四个界面都开启后，手机就能接收到伪基站的信号，比如我将网络选择设为只限2G后成功搜索到01001 2G名称的伪基站信号，当手机连接伪基站后，会显示正在注册，也可能直接就注册失败，但这时候在osmo-nitb终端界面就会看到连接手机的imsi号，比如1234567890123456，这时候在telnet界面输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openBSC&gt; en //记住要先en，有点像交换机，不同模式下能输入的命令不同</span><br><span class="line">openBSC# subscriber imsi 1234567890123456 authorized 1 //使注册者进入网络</span><br><span class="line">openBSC# subscriber imsi 1234567890123456 extension 5555 //设置注册者手机号</span><br></pre></td></tr></table></figure>
+
+<p>这时候手机就能在基站上注册成功了，同样步骤注册完两个账号后，就可以实现手机间的通信</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openBSC# subscriber imsi 987654321043210 sms sender imsi 1234567890123456 send test123</span><br></pre></td></tr></table></figure>
+
+<p>这条命令能让987654321043210接收到1234567890123456的短信，短信内容是test123，短信发送人会显示是5555发送过来的。</p>
+<p>具体命令可参考<a href="https://osmocom.org/projects/osmonitb/wiki/OsmoNITB" target="_blank" rel="noopener">https://osmocom.org/projects/osmonitb/wiki/OsmoNITB</a></p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#伪基站搭建"><span class="toc-text">伪基站搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境和前言"><span class="toc-text">环境和前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装OpenBSC"><span class="toc-text">安装OpenBSC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-OsmoTRX"><span class="toc-text">安装 OsmoTRX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装OsmoBTS"><span class="toc-text">安装OsmoBTS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行openBSC"><span class="toc-text">运行openBSC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用openBSC"><span class="toc-text">使用openBSC</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-9-17-伪基站搭建OPENBSC+USRPB210/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-9-21-php实现基本网站登陆与注册/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-9-11-hook技术的实际使用（面对经过混淆的APK）/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

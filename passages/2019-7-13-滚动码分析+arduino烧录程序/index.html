@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-7-13-滚动码分析+arduino烧录程序 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-07-13
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-7-13-滚动码分析+arduino烧录程序
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="滚动码分析-arduino烧录程序"><a href="#滚动码分析-arduino烧录程序" class="headerlink" title="滚动码分析+arduino烧录程序"></a>滚动码分析+arduino烧录程序</h1><p>环境：<br>VMware Workstation Pro14<br>ubuntu16.04.3<br>GNUradio<br>UHD<br>arduino1.8.9</p>
+<h2 id="滚动码分析"><a href="#滚动码分析" class="headerlink" title="滚动码分析"></a>滚动码分析</h2><p>说一说2019-7-8到2019-7-12这一周做了些什么事吧<br>固定码分析完后，又顺利完成了车钥匙的重放攻击，导师接着让我尝试用360生产的hackcube-special分析固定码，的确挺好用的，直接自动就显示固定码的信息了，重放的时候也比用usrpb210稳定很多（可能我一直没能设置好usrob210）<br><img src="/images/2019-7-13%E4%BD%8E%E9%A2%91%E5%8D%A1%E5%88%86%E6%9E%90/%E5%9B%BA%E5%AE%9A%E7%A0%81%E4%BF%A1%E5%8F%B7%E8%AF%BB%E5%8F%96.png" alt="avatar"><br>然后尝试用hackcube-special分析车钥匙的滚动码，结果失败了，因为它只提供keeloq加密的信号读取，而且只能是pwm方式进行信号提取（一般信号图上只有两种形状，然后一个作为1bit，一个作为0bit），我用usrpb210和inspectrum分析导师给的滚动码信号，发现除了大量重复的类似前导码和同步码的信号外，剩下的信号总共有四种形状，分别是：高低、高高低、高低低、高高低低，我估计这不是pwm而是曼彻斯特码或者差分曼彻斯特码。<br><img src="/images/2019-7-13%E4%BD%8E%E9%A2%91%E5%8D%A1%E5%88%86%E6%9E%90/%E6%BB%9A%E5%8A%A8%E7%A0%81%E5%88%86%E6%9E%90.png" alt="avatar"><br>关于hackcube能分析什么样的滚动码可以参考<a href="https://unicorn.360.com/hackcube/forum.php?mod=viewthread&amp;tid=17&amp;extra=page%3D1" target="_blank" rel="noopener">https://unicorn.360.com/hackcube/forum.php?mod=viewthread&amp;tid=17&amp;extra=page%3D1</a></p>
+<p>因为滚动码的分析比较困难，而且在学习了主流的滚动码加密方式keeloq、hitag2、和hitag3后，发现都需要从硬件上提取密钥，目前我没有这方面能力，所以停止研究滚动码。</p>
+<p>之后导师让我用hackcube研究低频卡，hackcube只能读取和写入em41xx系列的ID卡，但是还能往T5577卡内写入数据（因为em41xx和t5577卡的频率一样），而T5577也能写入HID卡的数据，于是就想修改hackcube代码从而实现往T5577卡内写入HID的数据</p>
+<h2 id="学习arduion"><a href="#学习arduion" class="headerlink" title="学习arduion"></a>学习arduion</h2><p>为了往单片机里烧入程序，就需要用到arduion，arduion新建一个项目的时候会有一个初始程序<br><img src="/images/2019-7-13%E4%BD%8E%E9%A2%91%E5%8D%A1%E5%88%86%E6%9E%90/1.png" alt="avatar"><br>其中setup函数是单片机启动后之调用一次的函数<br>loop函数是单片机执行完setup后循环执行的函数<br>arduion的入门可以参考：<a href="https://blog.csdn.net/c80486/article/details/52506975" target="_blank" rel="noopener">https://blog.csdn.net/c80486/article/details/52506975</a></p>
+<p>从github上clone完hackcube-special的代码后，可以直接打开ATmega32u4文件下的ATmega32u4.ino，里面就有setup和loop函数，打开它就能直接打开整个ATmega32u4项目（一开始我还一个一个文件拖到arduino）<br>然后选择菜单栏的工具-&gt;开发板 Arduino/Genuino Micro，之后点击左上角的勾号验证（如果编译错误可能是因为开发板选择错误了），然后就可以点击勾号旁边的上传了<br>具体可以参考：<a href="https://unicorn.360.com/hackcube/forum.php?mod=viewthread&amp;tid=64&amp;extra=page%3D1" target="_blank" rel="noopener">https://unicorn.360.com/hackcube/forum.php?mod=viewthread&amp;tid=64&amp;extra=page%3D1</a></p>
+<p>剩下的内容就是逆向和编码了，就不细讲了，因为时间问题只是简单地往T5577写入了数据，不具有交互能力。</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#滚动码分析-arduino烧录程序"><span class="toc-text">滚动码分析+arduino烧录程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#滚动码分析"><span class="toc-text">滚动码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习arduion"><span class="toc-text">学习arduion</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-7-13-滚动码分析+arduino烧录程序/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-7-18-内核模块helloworld编写/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-7-9-固定码分析/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

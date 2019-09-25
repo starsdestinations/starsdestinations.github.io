@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-9-10-hackrf使用及gps欺骗 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-10
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-9-10-hackrf使用及gps欺骗
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="hackrf使用"><a href="#hackrf使用" class="headerlink" title="hackrf使用"></a>hackrf使用</h1><p>环境：ubuntu16.04.3</p>
+<p>环境搭建：   </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gnuradio</span><br><span class="line"></span><br><span class="line">sudo apt-get install hackrf</span><br><span class="line"></span><br><span class="line">sudo apt-get install gqrx-sdr</span><br><span class="line"></span><br><span class="line">sudo apt-get install libhackrf-dev</span><br><span class="line"></span><br><span class="line">git <span class="built_in">clone</span> git://git.osmocom.org/gr-osmosdr</span><br><span class="line"><span class="comment">#GNU内就是用osmosdr作为信号发送端和接收端</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> gr-osmosdr/</span><br><span class="line"></span><br><span class="line">mkdir build</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> build/</span><br><span class="line"></span><br><span class="line">cmake …/</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<h2 id="gps欺骗"><a href="#gps欺骗" class="headerlink" title="gps欺骗"></a>gps欺骗</h2><p>在hackrf上安装好gpsdo晶振后就能稳定地进行gps欺骗了，之前没装gpsdo的usrp总是欺骗失败，虽然很多师傅都说usrpb210可以直接欺骗，但始终不成功，可能是虚拟机的原因吧。</p>
+<p>安装好hackrf及gnuradio的环境后，就能安装<a href="https://github.com/osqzss/gps-sdr-sim" target="_blank" rel="noopener">gps-sdr-sim</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/osqzss/gps-sdr-sim.git</span><br><span class="line">cd gps-sdr-sim</span><br><span class="line">gcc gpssim.c -lm -O3 -o gps-sdr-sim</span><br></pre></td></tr></table></figure>
+
+<p>gps模拟器默认运行时间只有五分钟（DUSER_MOTION_SIZE=3000），如果想要延长可以在gcc编译的时候就改设置，之后改设置也可以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc gpssim.c -lm -O3 -o gps-sdr-sim -DUSER_MOTION_SIZE=4000#gcc编译时就改设置</span><br><span class="line">make USER_MOTION_SIZE=4000#gcc编译后也可以改时间设置</span><br></pre></td></tr></table></figure>
+
+<p>安装好gps-sdr-sim后就是下载星历</p>
+<p><a href="ftp://cddis.gsfc.nasa.gov/pub/gps/data/daily" target="_blank" rel="noopener">ftp://cddis.gsfc.nasa.gov/pub/gps/data/daily</a></p>
+<p>nasa的网站上就可以下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./gps-sdr-sim -e &lt;导航电文文件&gt; -g &lt;轨迹文件&gt; -b 8 #动态路线可以使用这个命令，轨迹文件格式为name</span><br><span class="line"></span><br><span class="line">sudo ./gps-sdr-sim -e brdc3540.14n -l 66.6855097600,60.0366210938,100 -s 2500000 -b 8#静态的可以用-l设置经纬度和高度，-e是星历文件，-s是频率，-b是采样精度，hackrf一般设为8，之后会在当前目录下生成gpssim.bin文件</span><br></pre></td></tr></table></figure>
+
+<p>最后可以简单地使用命令实施gps欺骗</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hackrf_transfer -t gpssim.bin 1575420000 -s 2500000 -a 1 -x 1 #-x是增益，如果不想不违法就不要太高，一般低于47都没问题</span><br></pre></td></tr></table></figure>
+
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hackrf使用"><span class="toc-text">hackrf使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gps欺骗"><span class="toc-text">gps欺骗</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-9-10-hackrf使用及gps欺骗/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-9-11-hook技术的实际使用（面对经过混淆的APK）/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-8-31-CAN总线学习/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

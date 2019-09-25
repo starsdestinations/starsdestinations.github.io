@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   <meta name="author" content="starsdestinations">
   
@@ -179,23 +179,52 @@
     <h1 id="usrp-b210的环境搭建"><a href="#usrp-b210的环境搭建" class="headerlink" title="usrp b210的环境搭建"></a>usrp b210的环境搭建</h1><p>我的环境VM14+ubuntu16.04虚拟机<br>官方文档：<a href="https://kb.ettus.com/Building_and_Installing_the_USRP_Open-Source_Toolchain_(UHD_and_GNU_Radio)_on_Linux" target="_blank" rel="noopener">https://kb.ettus.com/Building_and_Installing_the_USRP_Open-Source_Toolchain_(UHD_and_GNU_Radio)_on_Linux</a></p>
 <h2 id="1、UHD驱动安装"><a href="#1、UHD驱动安装" class="headerlink" title="1、UHD驱动安装"></a>1、UHD驱动安装</h2><p>更新源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
-<p>安装UHD和GNURADIO的必要环境<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get -y install git swig cmake doxygen build-essential libboost-all-dev libtool libusb-1.0-0 libusb-1.0-0-dev libudev-dev libncurses5-dev libfftw3-bin libfftw3-dev libfftw3-doc libcppunit-1.13-0v5 libcppunit-dev libcppunit-doc ncurses-bin cpufrequtils python-numpy python-numpy-doc python-numpy-dbg python-scipy python-docutils qt4-bin-dbg qt4-default qt4-doc libqt4-dev libqt4-dev-bin python-qt4 python-qt4-dbg python-qt4-dev python-qt4-doc python-qt4-doc libqwt6abi1 libfftw3-bin libfftw3-dev libfftw3-doc ncurses-bin libncurses5 libncurses5-dev libncurses5-dbg libfontconfig1-dev libxrender-dev libpulse-dev swig g++ automake autoconf libtool python-dev libfftw3-dev libcppunit-dev libboost-all-dev libusb-dev libusb-1.0-0-dev fort77 libsdl1.2-dev python-wxgtk3.0 git-core libqt4-dev python-numpy ccache python-opengl libgsl-dev python-cheetah python-mako python-lxml doxygen qt4-default qt4-dev-tools libusb-1.0-0-dev libqwt5-qt4-dev libqwtplot3d-qt4-dev pyqt4-dev-tools python-qwt5-qt4 cmake git-core wget libxi-dev gtk2-engines-pixbuf r-base-dev python-tk liborc-0.4-0 liborc-0.4-dev libasound2-dev python-gtk2 libzmq-dev libzmq1 python-requests python-sphinx libcomedi-dev python-zmq python-setuptools</span><br></pre></td></tr></table></figure></p>
-<p>到这一步都顺利安装，接着便是安装UHD<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME</span><br><span class="line">mkdir workarea-uhd</span><br><span class="line">cd workarea-uhd</span><br><span class="line">git clone https://github.com/EttusResearch/uhd ;这里尝试了代理，但是速度依旧只有几K，而且中途容易下载失败，多次失败后发现是公司网络的问题</span><br><span class="line">cd uhd</span><br></pre></td></tr></table></figure></p>
-<p>Next, checkout the desired UHD version. You can get a full listing of tagged releases by running the command:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -l</span><br></pre></td></tr></table></figure></p>
-<p>Example truncated output of git tag -l:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -l</span><br><span class="line">...</span><br><span class="line">release_003_009_004</span><br><span class="line">release_003_009_005</span><br><span class="line">release_003_010_000_000</span><br></pre></td></tr></table></figure></p>
+
+<p>安装UHD和GNURADIO的必要环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get -y install git swig cmake doxygen build-essential libboost-all-dev libtool libusb-1.0-0 libusb-1.0-0-dev libudev-dev libncurses5-dev libfftw3-bin libfftw3-dev libfftw3-doc libcppunit-1.13-0v5 libcppunit-dev libcppunit-doc ncurses-bin cpufrequtils python-numpy python-numpy-doc python-numpy-dbg python-scipy python-docutils qt4-bin-dbg qt4-default qt4-doc libqt4-dev libqt4-dev-bin python-qt4 python-qt4-dbg python-qt4-dev python-qt4-doc python-qt4-doc libqwt6abi1 libfftw3-bin libfftw3-dev libfftw3-doc ncurses-bin libncurses5 libncurses5-dev libncurses5-dbg libfontconfig1-dev libxrender-dev libpulse-dev swig g++ automake autoconf libtool python-dev libfftw3-dev libcppunit-dev libboost-all-dev libusb-dev libusb-1.0-0-dev fort77 libsdl1.2-dev python-wxgtk3.0 git-core libqt4-dev python-numpy ccache python-opengl libgsl-dev python-cheetah python-mako python-lxml doxygen qt4-default qt4-dev-tools libusb-1.0-0-dev libqwt5-qt4-dev libqwtplot3d-qt4-dev pyqt4-dev-tools python-qwt5-qt4 cmake git-core wget libxi-dev gtk2-engines-pixbuf r-base-dev python-tk liborc-0.4-0 liborc-0.4-dev libasound2-dev python-gtk2 libzmq-dev libzmq1 python-requests python-sphinx libcomedi-dev python-zmq python-setuptools</span><br></pre></td></tr></table></figure>
+
+<p>到这一步都顺利安装，接着便是安装UHD</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME</span><br><span class="line">mkdir workarea-uhd</span><br><span class="line">cd workarea-uhd</span><br><span class="line">git clone https://github.com/EttusResearch/uhd ;这里尝试了代理，但是速度依旧只有几K，而且中途容易下载失败，多次失败后发现是公司网络的问题</span><br><span class="line">cd uhd</span><br></pre></td></tr></table></figure>
+
+<p>Next, checkout the desired UHD version. You can get a full listing of tagged releases by running the command:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -l</span><br></pre></td></tr></table></figure>
+
+<p>Example truncated output of git tag -l:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -l</span><br><span class="line">...</span><br><span class="line">release_003_009_004</span><br><span class="line">release_003_009_005</span><br><span class="line">release_003_010_000_000</span><br></pre></td></tr></table></figure>
+
 <p>Note: As of UHD Version 3.10.0.0, the versioning scheme has changed to be a quadruplet format. Each element and version will follow the format of: Major.API.ABI.Patch. Additional details on this versioning change can be found here.</p>
-<p>After identifying the version and corresponding release tag you need, check it out:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Example: For UHD 3.9.5:</span><br><span class="line">git checkout release_003_009_005</span><br><span class="line"># Example: For UHD 3.14.0.0</span><br><span class="line">git checkout v3.14.0.0</span><br></pre></td></tr></table></figure></p>
-<p>Next, create a build folder within the repository.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd host</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br></pre></td></tr></table></figure></p>
-<p>Next, invoke CMake to create the Makefiles.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure></p>
-<p>Next, run Make to build UHD.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make	;这一步大概耗时一个多小时，最后98%的时候因为虚拟机内存过小失败了，把内存从1G调整成2G后就成功make了</span><br></pre></td></tr></table></figure></p>
-<p>Next, you can optionally run some basic tests to verify that the build process completed properly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test</span><br></pre></td></tr></table></figure></p>
-<p>Next, install UHD, using the default install prefix, which will install UHD under the /usr/local/lib folder. You need to run this as root due to the permissions on that folder.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
-<p>Next, update the system’s shared library cache.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure></p>
-<p>Finally, make sure that the LD_LIBRARY_PATH environment variable is defined and includes the folder under which UHD was installed. Most commonly, you can add the line below to the end of your $HOME/.bashrc file:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=/usr/local/lib</span><br></pre></td></tr></table></figure></p>
-<p>If the LD_LIBRARY_PATH environment variable is already defined with other folders in your $HOME/.bashrc file, then add the line below to the end of your $HOME/.bashrc file to preserve the current settings.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib</span><br></pre></td></tr></table></figure></p>
+<p>After identifying the version and corresponding release tag you need, check it out:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Example: For UHD 3.9.5:</span><br><span class="line">git checkout release_003_009_005</span><br><span class="line"># Example: For UHD 3.14.0.0</span><br><span class="line">git checkout v3.14.0.0</span><br></pre></td></tr></table></figure>
+
+<p>Next, create a build folder within the repository.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd host</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br></pre></td></tr></table></figure>
+
+<p>Next, invoke CMake to create the Makefiles.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure>
+
+<p>Next, run Make to build UHD.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make	;这一步大概耗时一个多小时，最后98%的时候因为虚拟机内存过小失败了，把内存从1G调整成2G后就成功make了</span><br></pre></td></tr></table></figure>
+
+<p>Next, you can optionally run some basic tests to verify that the build process completed properly.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test</span><br></pre></td></tr></table></figure>
+
+<p>Next, install UHD, using the default install prefix, which will install UHD under the /usr/local/lib folder. You need to run this as root due to the permissions on that folder.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>Next, update the system’s shared library cache.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>Finally, make sure that the LD_LIBRARY_PATH environment variable is defined and includes the folder under which UHD was installed. Most commonly, you can add the line below to the end of your $HOME/.bashrc file:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=/usr/local/lib</span><br></pre></td></tr></table></figure>
+
+<p>If the LD_LIBRARY_PATH environment variable is already defined with other folders in your $HOME/.bashrc file, then add the line below to the end of your $HOME/.bashrc file to preserve the current settings.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib</span><br></pre></td></tr></table></figure>
+
 <p>For this change to take effect, you will need to close the current terminal window, and open a new terminal.</p>
-<p>At this point, UHD should be installed and ready to use. You can quickly test this, with no USRP device attached, by running uhd_find_devices. You should see something similar to the following.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux; GNU C++ version 4.8.4; Boost_105400; UHD_003.010.000.HEAD-0-g6e1ac3fc</span><br><span class="line"></span><br><span class="line">No UHD Devices Found</span><br></pre></td></tr></table></figure></p>
-<p><img src="/images/usrpb210的环境搭建/1.png" alt="avatar"><br>至此UHD安装完成</p>
+<p>At this point, UHD should be installed and ready to use. You can quickly test this, with no USRP device attached, by running uhd_find_devices. You should see something similar to the following.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux; GNU C++ version 4.8.4; Boost_105400; UHD_003.010.000.HEAD-0-g6e1ac3fc</span><br><span class="line"></span><br><span class="line">No UHD Devices Found</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/2019-7-4-usrpb210%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/1.png" alt="avatar"><br>至此UHD安装完成</p>
 <p>然后是下载FPGA images，设备运行的时候需要加载，我一开始没有下载就报错了</p>
 <h2 id="2、下载FPGA"><a href="#2、下载FPGA" class="headerlink" title="2、下载FPGA"></a>2、下载FPGA</h2><p>Downloading the UHD FPGA Images<br>You can now download the UHD FPGA Images for this installation. This can be done by running the command uhd_images_downloader.</p>
 <p>   $ sudo uhd_images_downloader<br>Note: Since this installation is being installed to a system level directory (e.g. /usr/local), the uhd_images_downloader command requires sudo privileges.</p>
@@ -206,23 +235,54 @@
 <p>接下来就是安装GNU</p>
 <h2 id="3、安装GNURadio"><a href="#3、安装GNURadio" class="headerlink" title="3、安装GNURadio"></a>3、安装GNURadio</h2><p>First, make a folder to hold the repository.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd $HOME</span><br><span class="line">mkdir workarea-gnuradio</span><br><span class="line">cd workarea-gnuradio</span><br></pre></td></tr></table></figure>
-<p>Next, clone the repository.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/gnuradio/gnuradio</span><br></pre></td></tr></table></figure></p>
-<p>Next, go into the repository and check out the desired GNU Radio version.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd gnuradio</span><br></pre></td></tr></table></figure></p>
-<p>To checkout the v3.7.13.4 branch:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout v3.7.13.4</span><br></pre></td></tr></table></figure></p>
-<p>Or to checkout the maint-3.7 branch:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout maint-3.7</span><br></pre></td></tr></table></figure></p>
-<p>Next, update the submodules:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive	;这里出现了Submodule path &apos;volk&apos;: checked out，不知道什么原因，但似乎不影响之后的步骤</span><br></pre></td></tr></table></figure></p>
-<p>Next, create a build folder within the repository.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cd build</span><br></pre></td></tr></table></figure></p>
-<p>Next, invoke CMake to create the Makefiles.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure></p>
-<p>Next, run Make to build GNU Radio.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure></p>
-<p>Next, you can optionally run some basic tests to verify that the build process completed properly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test</span><br></pre></td></tr></table></figure></p>
-<p>Next, install GNU Radio, using the default install prefix, which will install GNU Radio under the /usr/local/lib folder. You need to run this as root due to the permissions on that folder.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
-<p>Finally, update the system’s shared library cache.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure></p>
-<p>At this point, GNU Radio should be installed and ready to use. You can quickly test this, with no USRP device attached, by running the following quick tests.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gnuradio-config-info --version</span><br><span class="line">gnuradio-config-info --prefix</span><br><span class="line">gnuradio-config-info --enabled-components</span><br></pre></td></tr></table></figure></p>
-<p>There is a simple flowgraph that you can run that does not require any USRP hardware. It’s called the dialtone test, and it produces a PSTN dial tone on the computer’s speakers. Running it verifies that all the libraries can be found, and that the GNU Radio run-time is working.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python $HOME/workarea-gnuradio/gnuradio/gr-audio/examples/python/dial_tone.py</span><br></pre></td></tr></table></figure></p>
-<p>You can try launching the GNU Radio Companion (GRC) tool, a visual tool for building and running GNU Radio flowgraphs.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gnuradio-companion</span><br></pre></td></tr></table></figure></p>
-<p>If “gnuradio-companion” does not start and complains about the PYTHONPATH environment variable, then you may have to set this in your $HOME/.bashrc file, as shown below.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PYTHONPATH=/usr/local/lib/python2.7/dist-packages</span><br></pre></td></tr></table></figure></p>
+
+<p>Next, clone the repository.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/gnuradio/gnuradio</span><br></pre></td></tr></table></figure>
+
+<p>Next, go into the repository and check out the desired GNU Radio version.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd gnuradio</span><br></pre></td></tr></table></figure>
+
+<p>To checkout the v3.7.13.4 branch:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout v3.7.13.4</span><br></pre></td></tr></table></figure>
+
+<p>Or to checkout the maint-3.7 branch:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout maint-3.7</span><br></pre></td></tr></table></figure>
+
+<p>Next, update the submodules:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive	;这里出现了Submodule path &apos;volk&apos;: checked out，不知道什么原因，但似乎不影响之后的步骤</span><br></pre></td></tr></table></figure>
+
+<p>Next, create a build folder within the repository.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cd build</span><br></pre></td></tr></table></figure>
+
+<p>Next, invoke CMake to create the Makefiles.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ../</span><br></pre></td></tr></table></figure>
+
+<p>Next, run Make to build GNU Radio.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<p>Next, you can optionally run some basic tests to verify that the build process completed properly.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make test</span><br></pre></td></tr></table></figure>
+
+<p>Next, install GNU Radio, using the default install prefix, which will install GNU Radio under the /usr/local/lib folder. You need to run this as root due to the permissions on that folder.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>Finally, update the system’s shared library cache.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>At this point, GNU Radio should be installed and ready to use. You can quickly test this, with no USRP device attached, by running the following quick tests.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gnuradio-config-info --version</span><br><span class="line">gnuradio-config-info --prefix</span><br><span class="line">gnuradio-config-info --enabled-components</span><br></pre></td></tr></table></figure>
+
+<p>There is a simple flowgraph that you can run that does not require any USRP hardware. It’s called the dialtone test, and it produces a PSTN dial tone on the computer’s speakers. Running it verifies that all the libraries can be found, and that the GNU Radio run-time is working.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python $HOME/workarea-gnuradio/gnuradio/gr-audio/examples/python/dial_tone.py</span><br></pre></td></tr></table></figure>
+
+<p>You can try launching the GNU Radio Companion (GRC) tool, a visual tool for building and running GNU Radio flowgraphs.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gnuradio-companion</span><br></pre></td></tr></table></figure>
+
+<p>If “gnuradio-companion” does not start and complains about the PYTHONPATH environment variable, then you may have to set this in your $HOME/.bashrc file, as shown below.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PYTHONPATH=/usr/local/lib/python2.7/dist-packages</span><br></pre></td></tr></table></figure>
+
 <p>UHD和GNU安装好后，插入设备，尝试运行uhd_find_devices，出现了“USB device 2500:0020 无法连接到理想的主机控制器”的报错，我原本以为是设备出了问题，因为官网上似乎说b210的信号是2500:0021，镜像加载也是加载了b200，谷歌了之后发现这是因为usb兼容性的问题，在虚拟机设置的USB控制器里把usb兼容性改为usb3.0后解决了问题</p>
-<p>运行正常<br><img src="images/2019-7-4-usrpb210环境搭建/3.png" alt="avatar"><br><img src="images/2019-7-4-usrpb210环境搭建/4.png" alt="avatar"><br>最后这里有一点搞不懂<br>uhd_find_devices和uhd_usrp_probe两个命令加载的FPGA images不一样，前者是b200，后者是b210，不过都正确识别出了b210的设备，目前对这个问题没有头绪。</p>
+<p>运行正常<br><img src="/images/2019-7-4-usrpb210%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/3.png" alt="avatar"><br><img src="/images/2019-7-4-usrpb210%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/4.png" alt="avatar"><br>最后这里有一点搞不懂<br>uhd_find_devices和uhd_usrp_probe两个命令加载的FPGA images不一样，前者是b200，后者是b210，不过都正确识别出了b210的设备，目前对这个问题没有头绪。</p>
 
   </article>
   <aside class="table-content" id="site-toc">
@@ -240,7 +300,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">http://yoursite.com/passages/2019-7-4-usrpb210环境搭建/</a>
+          <a href="" target="_blank">http://yoursite.com/passages/2019-7-4-usrpb210环境搭建/</a>
         </div>
       
       <div>
@@ -351,7 +411,7 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-7-6-固定码遥控器重放攻击/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
     <a href="/passages/2019-5-29-自己动手写操作系统(3)/" data-enable="true">

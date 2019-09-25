@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-9-11-hook技术的实际使用（面对经过混淆的APK） | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-11
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-9-11-hook技术的实际使用（面对经过混淆的APK）
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="hook技术的实际使用（面对经过混淆的APK）"><a href="#hook技术的实际使用（面对经过混淆的APK）" class="headerlink" title="hook技术的实际使用（面对经过混淆的APK）"></a>hook技术的实际使用（面对经过混淆的APK）</h1><h2 id="hook获取函数及返回值"><a href="#hook获取函数及返回值" class="headerlink" title="hook获取函数及返回值"></a>hook获取函数及返回值</h2><p>以hook工具frida举例，hook的难点主要在于逆向代码，需要知道APK包名以及所要hook的类，之后就能使用Javause（）来调用这个类。</p>
+<p>frida主要能获取java类中的函数的参数值以及返回值，还有在类中定义的变量</p>
+<p>举一个函数作为例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">d</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dA</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a+b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"star hook!"</span>);</span><br><span class="line">        <span class="keyword">var</span> classf = Java.use(<span class="string">"com.a.b.c.d"</span>);<span class="comment">//d是一个class</span></span><br><span class="line">        classf.dA.implementation = <span class="function"><span class="keyword">function</span>(<span class="params">p1,p2</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//dA为d这个class中的函数，p1、p2可以随意命名，只要参数的数量与实际函数符合就行</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"--------------------------------"</span>);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"function a hook"</span>);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(p1));</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(p2));</span><br><span class="line">            <span class="keyword">var</span> result=classf.dA(p1,p2);</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"--------------------------------"</span>);</span><br><span class="line">            <span class="keyword">return</span> result;<span class="comment">//return是为了让手机中的程序正常运行，如果没有return，程序会报错</span></span><br><span class="line">	&#125;;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(e)&#123;<span class="comment">//js是弱类型的语言，所以报错信息不需要说明类型，可以直接打印e，打印错误信息是为了方便调试</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"ERROR!"</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>像上面这个js程序，就能够打印出dA这个函数的参数以及返回值了。像这里的com.a.b.c.d就是经过混淆后的包名和类名，在实际hook中，以apk中的包名和类名为准，而不是以源码为准。</p>
+<p>当然还需要一个python程序来调用这个js脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> frida</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line"></span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</span><br><span class="line">os.system(<span class="string">"adb forward tcp:27042 tcp:27042"</span>)</span><br><span class="line">os.system(<span class="string">"adb forward tcp:27043 tcp:27043"</span>)</span><br><span class="line"></span><br><span class="line">output = os.popen(<span class="string">'adb shell ps |grep testapk'</span>)<span class="comment">#taskapk为要hook的apk名字</span></span><br><span class="line">info = output.read()</span><br><span class="line">output.close()</span><br><span class="line">print(info)</span><br><span class="line">pid=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> info.splitlines():</span><br><span class="line">    <span class="keyword">if</span> line.__contains__(<span class="string">"system"</span>):</span><br><span class="line">        item = line.split(<span class="string">" "</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> item[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span>(len(i)&gt;<span class="number">1</span>):</span><br><span class="line">                print(i)</span><br><span class="line">                pid=int(i)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">rdev = frida.get_remote_device()</span><br><span class="line">session = rdev.attach(pid)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"test.js"</span>) <span class="keyword">as</span> f://test.js是实际hook手机程序的js脚本文件名</span><br><span class="line">    src = f.read()</span><br><span class="line">script = session.create_script(src.decode(<span class="string">"utf-8"</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_message</span><span class="params">(message, data)</span>:</span></span><br><span class="line">    print(message)</span><br><span class="line"></span><br><span class="line">script.on(<span class="string">"message"</span>,on_message)</span><br><span class="line">script.load()</span><br></pre></td></tr></table></figure>
+
+<h2 id="hook的函数没有运行"><a href="#hook的函数没有运行" class="headerlink" title="hook的函数没有运行"></a>hook的函数没有运行</h2><p>在实际hook中，可能hook的是通信过程中的加密或解密函数，像我们这么写的python脚本运行几秒就会结束，在这点时间内如果加密或解密函数没有运行，那就白跑了，什么数据都抓不到。</p>
+<p>第一种方法：</p>
+<p>在python脚本底部增加</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">raw_input()</span><br></pre></td></tr></table></figure>
+
+<p>这样在python脚本等待输入的时候，只要hook的函数有运行到，那就会打印出参数和返回值</p>
+<p>第二种方法：</p>
+<p>用RPC远程调用函数，RPC可以不管目标函数是否有调用，从而强行去调用它</p>
+<p>在js脚本中可以这么写</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rpc.exports = &#123;</span><br><span class="line"> </span><br><span class="line">myfunc: <span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line">        Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">//与上文一样</span></span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在python中可以在 <code>script.load()</code> 之后添加 <code>script.exports.myfunc(a,b)</code>从而调用这个函数</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>frida编写js脚本的时候还有一些需要注意的点，比如java中私有函数和开放函数的时候返回值就不一样，前者是 <code>return this.dA(p1,p2);</code> 后者是<code>return classf.dA(p1,p2);</code></p>
+<p>在类中的变量可以直接用class.value来调用，就跟调用函数一样。</p>
+<p>遗留问题：目前还是不知道怎么打印出函数内的局部变量</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.freebuf.com/articles/system/190565.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/system/190565.html</a> 一篇文章带你领悟Frida的精髓（基于安卓8.1）</p>
+<p><a href="https://mabin004.github.io/2018/02/08/frida%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E4%BB%BB%E6%84%8F%E8%B0%83%E7%94%A8/" target="_blank" rel="noopener">https://mabin004.github.io/2018/02/08/frida%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0%E4%BB%BB%E6%84%8F%E8%B0%83%E7%94%A8/</a> frida导出函数任意调用</p>
+<p><a href="https://blog.csdn.net/jiangwei0910410003/article/details/80372118" target="_blank" rel="noopener">https://blog.csdn.net/jiangwei0910410003/article/details/80372118</a> Android逆向之旅—Hook神器家族的Frida工具使用详解</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hook技术的实际使用（面对经过混淆的APK）"><span class="toc-text">hook技术的实际使用（面对经过混淆的APK）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hook获取函数及返回值"><span class="toc-text">hook获取函数及返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hook的函数没有运行"><span class="toc-text">hook的函数没有运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-text">其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-9-11-hook技术的实际使用（面对经过混淆的APK）/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-9-17-伪基站搭建OPENBSC+USRPB210/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-9-10-hackrf使用及gps欺骗/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

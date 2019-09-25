@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   <meta name="author" content="starsdestinations">
   
@@ -39,7 +39,7 @@
     leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
     welcome: {"enable":false,"interval":30},
     start_time: "2019-03-13",
-    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
     is_post: true,
     lock: false,
     author: "starsdestinations",
@@ -178,12 +178,12 @@
   <article class="passage-article">
     <h1 id="车钥匙重放攻击"><a href="#车钥匙重放攻击" class="headerlink" title="车钥匙重放攻击"></a>车钥匙重放攻击</h1><p>我的设备：usrp-b210 315MHZ固定码钥匙<br>环境：ubuntu16.04.3</p>
 <h2 id="1、确认信号频率"><a href="#1、确认信号频率" class="headerlink" title="1、确认信号频率"></a>1、确认信号频率</h2><p>设备的发射信号基本上厂家都会提供，查好信号频率后可以使用uhd的相关命令检测信号<br>uhd_fft -a serial=315F31C -f 315M -s 2M（M必须是大写，或者用000替代）<br>其中serial是我usrp-b210的设备序列号，可以通过uhd_find_devices查看<br>-f是频率 -s是采样率</p>
-<p>当周围没有信号源时，示波器界面如下<br><img src="images/2019-7-6-固定码重放攻击/1.png" alt="avatar"></p>
-<p>按下钥匙按钮，发射信号，示波器界面如下<br><img src="images/2019-7-6-固定码重放攻击/2.png" alt="avatar"></p>
-<p>从waterfall界面能更直观地看出信号<br><img src="images/2019-7-6-固定码重放攻击/3.png" alt="avatar"><br>蓝色是北京，当出现白色时说明接收到信号，白色越亮，说明信号强度越大，之所以会出现多列白点，我估计可能是因为信号波的反射（后来主管告诉我是谐波）</p>
+<p>当周围没有信号源时，示波器界面如下<br><img src="/images/2019-7-6-%E5%9B%BA%E5%AE%9A%E7%A0%81%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/1.png" alt="avatar"></p>
+<p>按下钥匙按钮，发射信号，示波器界面如下<br><img src="/images/2019-7-6-%E5%9B%BA%E5%AE%9A%E7%A0%81%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/2.png" alt="avatar"></p>
+<p>从waterfall界面能更直观地看出信号<br><img src="/images/2019-7-6-%E5%9B%BA%E5%AE%9A%E7%A0%81%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/3.png" alt="avatar"><br>蓝色是北京，当出现白色时说明接收到信号，白色越亮，说明信号强度越大，之所以会出现多列白点，我估计可能是因为信号波的反射（后来主管告诉我是谐波）</p>
 <h2 id="2、利用GNUradio进行重放攻击"><a href="#2、利用GNUradio进行重放攻击" class="headerlink" title="2、利用GNUradio进行重放攻击"></a>2、利用GNUradio进行重放攻击</h2><p>这里我参考了别人利用hackRF和GNUradio实现的重放攻击<br>参考网址如下：599mag.com/2019/01/16/replay-attack-with-gnu-radio-and-hack-rf/</p>
 <p>整个步骤可以分为两部分：录制和重放<br>录制需要GNU中uhd的接收组件（UHD:usrp source），重放需要uhd的发射组件(UHD:usrp sink)，而信号的存放和读取需要一个文件储存组件(file sink和file source)，额外可以加上一个图形界面确认自己的录制和重放是否正常（QT gui frequency sink）</p>
-<p>打开GNU的命令：gnuradio-companion<br>录制：<br><img src="images/2019-7-6-固定码重放攻击/4.png" alt="avatar"><br>重放：<br><img src="images/2019-7-6-固定码重放攻击/5.png" alt="avatar"></p>
+<p>打开GNU的命令：gnuradio-companion<br>录制：<br><img src="/images/2019-7-6-%E5%9B%BA%E5%AE%9A%E7%A0%81%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/4.png" alt="avatar"><br>重放：<br><img src="/images/2019-7-6-%E5%9B%BA%E5%AE%9A%E7%A0%81%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB/5.png" alt="avatar"></p>
 <p>这里面有四个关键参数：<br>其中两个是HDU组件的ch0的center freq和gain value，分别是频率和增益，频率就是设备的频率，上面两张图的频率应该改为315e6（我在测试其它设备就懒得改了），也就是315MHZ，增益是根据GNU官网上推荐的70-90，然后我取了中间值。<br>还有一个参数就是file组件的file，文件最好储存在home或者文档里，防止覆盖时因权限问题而出错。<br>最后一个参数是variable组件的value，一般新建一个视图的时候默认会有两个组件，一个是options，另外一个就是variable，而variable组件的默认ID是samp_rate，也就是采样率（每秒钟采样多少次），采样率决定了信号的精度，这里我选择2M。</p>
 <p>参数设置好后，把三个主要组件的接口用鼠标左键连接起来，确认好接口的in和out，然后选中要用的组件后按上方的绿色三角形按钮，分别完成录制和重放，这时我们就完成了重放攻击。</p>
 <h2 id="3、遇到的两个问题"><a href="#3、遇到的两个问题" class="headerlink" title="3、遇到的两个问题"></a>3、遇到的两个问题</h2><p>第一个问题：当我长按按钮时，信号灯会一直亮，松开后信号灯就灭了，但是用usrpb210重放攻击就会让信号灯不停闪烁，猜测可能是设备的精度问题，或者是我采样率设置有问题。<br>第二个问题：当我录制时，如果按钮靠天线太近，重放后的信号就会失效，信号灯没有反应，我猜测是我的天线靠近墙壁，信号的反射干扰比较严重。</p>
@@ -204,7 +204,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">http://yoursite.com/passages/2019-7-6-固定码遥控器重放攻击/</a>
+          <a href="" target="_blank">http://yoursite.com/passages/2019-7-6-固定码遥控器重放攻击/</a>
         </div>
       
       <div>
@@ -315,7 +315,7 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/passages/2019-7-9-固定码分析/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
     <a href="/passages/2019-7-4-usrpb210环境搭建/" data-enable="true">

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-7-22-zigbee环境搭建 | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-07-22
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-7-22-zigbee环境搭建
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="ubiqua和cc2531实现zigbee抓包"><a href="#ubiqua和cc2531实现zigbee抓包" class="headerlink" title="ubiqua和cc2531实现zigbee抓包"></a>ubiqua和cc2531实现zigbee抓包</h1><p>首先安装ubiqua软件<br>然后安装cc2531驱动（不安装驱动计算机识别不出来，无法使用）<br>然后在ubiqua软件中选择菜单栏Device-&gt;Add device-&gt;local devices-&gt;cc2531（如果驱动安装成功，能识别出是cc2531），点击add<br>之后在Device Manager栏中会出现USB2531设备，往右拖动按钮可以开始抓包，如果没抓到，可以右击设备或者在Device-&gt;channel中选择不同频道</p>
+<h1 id="USRP-B210和GNUradio实现zigbee发包"><a href="#USRP-B210和GNUradio实现zigbee发包" class="headerlink" title="USRP-B210和GNUradio实现zigbee发包"></a>USRP-B210和GNUradio实现zigbee发包</h1><h2 id="第一步：安装gr-foo"><a href="#第一步：安装gr-foo" class="headerlink" title="第一步：安装gr-foo"></a>第一步：安装gr-foo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/bastibl/gr-foo.git</span><br><span class="line">cd gr-foo</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>中间cmake报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMake 3.8 or higher is required.  You are running version 3.5.1</span><br></pre></td></tr></table></figure>
+
+<p>更新cmake,参考:<a href="https://askubuntu.com/questions/829310/how-to-upgrade-cmake-in-ubuntu" target="_blank" rel="noopener">https://askubuntu.com/questions/829310/how-to-upgrade-cmake-in-ubuntu</a></p>
+<p>1、Check your current version with </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+
+<p>2、Uninstall it with </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove cmake</span><br></pre></td></tr></table></figure>
+
+<p>3、Visit <a href="https://cmake.org/download/" target="_blank" rel="noopener">https://cmake.org/download/</a> and download the latest binaries<br>In my case cmake-3.6.2-Linux-x86_64.sh is sufficient copy the binary to /opt/<br>4、</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /opt/cmake-3.*your_version*.sh (chmod makes the script executable)</span><br></pre></td></tr></table></figure>
+
+<p>5、</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bash /opt/cmake-3.*your_version.sh* (you&apos;ll need to press y twice)</span><br></pre></td></tr></table></figure>
+
+<p>The script installs to /opt/cmake-3.<em>your_version</em> so in order to get the cmake command, make a symbolic link:</p>
+<p>6、</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /opt/cmake-3.*your_version*/bin/* /usr/local/bin</span><br></pre></td></tr></table></figure>
+
+<p>Test your results with </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+
+<p>cmake版本的问题解决后又出现了新问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CMake Error at CMakeLists.txt:98 (find_package):</span><br><span class="line">  Could not find a configuration file for package &quot;Gnuradio&quot; that is</span><br><span class="line">  compatible with requested version &quot;3.8&quot;.</span><br><span class="line"></span><br><span class="line">  The following configuration files were considered but not accepted:</span><br><span class="line"></span><br><span class="line">    /usr/local/lib/cmake/gnuradio/GnuradioConfig.cmake, version: 3.7.13.4</span><br></pre></td></tr></table></figure>
+
+<p>谷歌不到类似问题，之后阅读github上的readme，可能是我的gr-foo的branches有问题，因为我的gnuradio最新版本就是3.7.13.4，看了之前gnuradio的安装过程，我尝试在gr-foo下用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout maint-3.7</span><br></pre></td></tr></table></figure>
+
+<p>改变branch，成功cmake</p>
+<p>之后一切顺利。</p>
+<h2 id="第二步：安装gr-ieee802-15-4"><a href="#第二步：安装gr-ieee802-15-4" class="headerlink" title="第二步：安装gr-ieee802.15.4"></a>第二步：安装gr-ieee802.15.4</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/bastibl/gr-ieee802.15.4.git</span><br><span class="line">cd gr-ieee802.15.4</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br><span class="line">git checkout maint-3.7</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>打开gr-ieee802-15-4下的examples中的transceiver_CSS_USRP.grc可能会发现miss block，这是因为有些模块是由其它模块组成的，没办法在安装的过程中直接载入到GNUradio中，这时候把examples下的几个流程图都打开并运行一遍，重启GNUradio就会发现缺失的模块出现了</p>
+<h2 id="第三步：运行gr-ieee802-15-4下app文件中的transceiver-sh"><a href="#第三步：运行gr-ieee802-15-4下app文件中的transceiver-sh" class="headerlink" title="第三步：运行gr-ieee802.15.4下app文件中的transceiver.sh"></a>第三步：运行gr-ieee802.15.4下app文件中的transceiver.sh</h2><p>运行transceiver.sh前需要在gr-ieee802-15-4下的examples创建transceiver_OQPSK.py文件，创建方法就是在gnuradio-compation中选中流程图后点击绿色箭头左边的generate按钮，就会生成一个py文件，运行这个py文件就相当于运行这个流程图（流程图可以参考gr-ieee802.15.4官网的zigbee教程搭建，具体参数可以参考gr-ieee802-15-4下的examples中的transceiver_CSS_USRP.grc流程图）</p>
+<p>如果运行失败，可以用vim查看transceiver.sh文件，寻找原因</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ubiqua和cc2531实现zigbee抓包"><span class="toc-text">ubiqua和cc2531实现zigbee抓包</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#USRP-B210和GNUradio实现zigbee发包"><span class="toc-text">USRP-B210和GNUradio实现zigbee发包</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一步：安装gr-foo"><span class="toc-text">第一步：安装gr-foo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二步：安装gr-ieee802-15-4"><span class="toc-text">第二步：安装gr-ieee802.15.4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三步：运行gr-ieee802-15-4下app文件中的transceiver-sh"><span class="toc-text">第三步：运行gr-ieee802.15.4下app文件中的transceiver.sh</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-7-22-zigbee环境搭建/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">系列教程</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/categories/webpack4%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B/" target="_blank">webpack4系列教程</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/design-patterns/" target="_blank">设计模式手册</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/passages/2019-8-8-通过frida学习hook/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-7-18-内核模块helloworld编写/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
