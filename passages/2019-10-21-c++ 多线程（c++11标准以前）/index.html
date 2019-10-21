@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="starsdestinations">
+  
+  
+  <title>2019-9-21-c++ 多线程（c++11标准以前） | Hexo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Hexo, Theme-AD">
+  
+
+  
+  <meta name="description" content="starsdestinations的小站">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-03-13",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "starsdestinations",
+    share: {"twitter":false,"facebook":false,"weibo":false,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">starsdestinations</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 自学历程</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/starsdestinations/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-10-21
+    </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    2019-9-21-c++ 多线程（c++11标准以前）
+  </h1>
+  
+  <article class="passage-article">
+    <h1 id="c-多线程（c-11标准以前）"><a href="#c-多线程（c-11标准以前）" class="headerlink" title="c++ 多线程（c++11标准以前）"></a>c++ 多线程（c++11标准以前）</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>C++标准并没有提供对多进程并发的原生支持，所以C++的多进程并发要靠其他API——这需要依赖相关平台。</p>
+<p>Linux系统下的多线程遵循POSIX线程接口，称为pthread。编写Linux下的多线程程序，需要使用头文件pthread.h，连接时需要使用库libpthread.a。顺便说一下，Linux下pthread的实现是通过系统调用clone（）来实现的。clone（）是Linux所特有的系统调用，它的使用方式类似fork。</p>
+<p>POSIX：</p>
+<p><strong>可移植操作系统接口</strong>（英语：Portable Operating System Interface，缩写为<strong>POSIX</strong>）是<a href="https://baike.baidu.com/item/IEEE" target="_blank" rel="noopener">IEEE</a>为要在各种<a href="https://baike.baidu.com/item/UNIX" target="_blank" rel="noopener">UNIX</a><a href="https://baike.baidu.com/item/操作系统" target="_blank" rel="noopener">操作系统</a>上运行软件，而定义<a href="https://baike.baidu.com/item/API" target="_blank" rel="noopener">API</a>的一系列互相关联的标准的总称。</p>
+<p>C++11 标准提供了一个新的线程库，内容包括了管理线程、保护共享数据、线程间的同步操作、低级原子操作等各种类。标准极大地提高了程序的可移植性，以前的多线程依赖于具体的平台，而现在有了统一的接口进行实现。</p>
+<p>C++11 新标准中引入了几个头文件来支持多线程编程：</p>
+<ul>
+<li><strong>&lt; thread &gt;</strong> :包含std::thread类以及std::this_thread命名空间。</li>
+<li><strong>&lt; atomic &gt;</strong> :包含std::atomic和std::atomic_flag类，以及一套C风格的原子类型和与C兼容的原子操作的函数。</li>
+<li><strong>&lt; mutex &gt;</strong> :包含了与互斥量相关的类以及其他类型和函数。</li>
+<li><strong>&lt; future &gt;</strong> :包含两个Provider类（std::promise和std::package_task）和两个Future类（std::future和std::shared_future）以及相关的类型和函数。</li>
+<li><strong>&lt; condition_variable &gt;</strong> :包含与条件变量相关的类，包括std::condition_variable和std::condition_variable_any。</li>
+</ul>
+<h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line">pthread_create (thread, attr, start_routine, arg) ;</span><br></pre></td></tr></table></figure>
+
+<p>pthread_create的四个参数</p>
+<ul>
+<li><p><strong>thread</strong>：指向线程标识符指针。</p>
+</li>
+<li><p><strong>attr</strong>：一个不透明的属性对象，可以被用来设置线程属性。您可以指定线程属性对象，也可以使用默认值 NULL。</p>
+</li>
+<li><p><strong>start_routine</strong>：线程运行函数起始地址，一旦线程被创建就会执行。</p>
+</li>
+<li><p><strong>arg</strong>：运行函数的参数。它必须通过把引用作为指针强制转换为 void 类型进行传递。如果没有传递参数，则使用 NULL。</p>
+</li>
+</ul>
+<p>创建线程成功时，函数返回 0，若返回值不为 0 则说明创建线程失败。</p>
+<h2 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line">pthread_exit (status)</span><br></pre></td></tr></table></figure>
+
+<p>在这里，<strong>pthread_exit</strong> 用于显式地退出一个线程。通常情况下，pthread_exit() 函数是在线程完成工作后无需继续存在时被调用。线程在运行完成后会自动隐式地退出。</p>
+<h2 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NUM_THREADS     5</span></span><br><span class="line"><span class="comment">// 线程的运行函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">PrintHello</span><span class="params">(<span class="keyword">void</span> *threadid)</span></span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">   <span class="comment">// 对传入的参数进行强制类型转换，由无类型指针变为整形数指针，然后再读取</span></span><br><span class="line">   <span class="keyword">int</span> tid = *((<span class="keyword">int</span>*)threadid);</span><br><span class="line">   <span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello Runoob! 线程 ID, "</span> &lt;&lt; tid &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">   pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="comment">// 定义线程的 id 变量，多个变量使用数组</span></span><br><span class="line">   <span class="keyword">pthread_t</span> threads[NUM_THREADS];</span><br><span class="line">   <span class="keyword">int</span> indexes[NUM_THREADS];<span class="comment">// 用数组来保存i的值</span></span><br><span class="line">   <span class="keyword">int</span> rc;</span><br><span class="line">   <span class="keyword">int</span> i;</span><br><span class="line">   <span class="keyword">for</span>( i=<span class="number">0</span>; i &lt; NUM_THREADS; i++ )&#123;      </span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"main() : 创建线程, "</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">      indexes[i] = i; <span class="comment">//先保存i的值</span></span><br><span class="line">      <span class="comment">//参数依次是：创建的线程id，线程参数，调用的函数，传入的函数参数</span></span><br><span class="line">      <span class="comment">//线程函数参数传入的时候必须强制转换为void* 类型，即无类型指针        </span></span><br><span class="line">      rc = pthread_create(&amp;threads[i], <span class="literal">NULL</span>, </span><br><span class="line">                          PrintHello, (<span class="keyword">void</span> *)&amp;(indexes[i]));</span><br><span class="line">      <span class="keyword">if</span> (rc)&#123;</span><br><span class="line">         <span class="built_in">cout</span> &lt;&lt; <span class="string">"Error:无法创建线程,"</span> &lt;&lt; rc &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//等各个线程退出后，进程才结束，否则进程强制结束了，线程可能还没反应过来；</span></span><br><span class="line">   pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译并运行后预期产生如下结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ g++ test.cpp -lpthread -o test.o</span><br><span class="line">$ ./test.o</span><br><span class="line">main() : 创建线程, 0</span><br><span class="line">main() : 创建线程, 1</span><br><span class="line">Hello Runoob! 线程 ID, 0</span><br><span class="line">main() : 创建线程, Hello Runoob! 线程 ID, 21</span><br><span class="line"></span><br><span class="line">main() : 创建线程, 3</span><br><span class="line">Hello Runoob! 线程 ID, 2</span><br><span class="line">main() : 创建线程, 4</span><br><span class="line">Hello Runoob! 线程 ID, 3</span><br><span class="line">Hello Runoob! 线程 ID, 4</span><br></pre></td></tr></table></figure>
+
+<p>实际在Ubuntu16中测试结果却是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">main() : 创建线程, 0</span><br><span class="line">main() : 创建线程, 1</span><br><span class="line">main() : 创建线程, 2</span><br><span class="line">main() : 创建线程, 3</span><br><span class="line">main() : 创建线程, 4</span><br><span class="line">Hello Runoob! 线程 ID, 4</span><br><span class="line">Hello Runoob! 线程 ID, 3</span><br><span class="line">Hello Runoob! 线程 ID, 2</span><br><span class="line">Hello Runoob! 线程 ID, 1</span><br><span class="line">Hello Runoob! 线程 ID, 0</span><br></pre></td></tr></table></figure>
+
+<p>非常规律，目前原因未知。</p>
+<h2 id="例子2（包含pthread-join的使用）"><a href="#例子2（包含pthread-join的使用）" class="headerlink" title="例子2（包含pthread_join的使用）"></a>例子2（包含pthread_join的使用）</h2><p>pthread_join（）函数原型：</p>
+<p>int pthread_join(pthread_t thread, void **retval);</p>
+<p>两个参数:</p>
+<ul>
+<li>thread: 线程标识符，即线程ID，标识唯一线程。</li>
+<li>retval: 用户定义的指针，用来存储被等待线程的返回值。</li>
+</ul>
+<p>返回值:    线程连接的状态，0是成功，非0是失败</p>
+<p>linux线程执行和windows不同，pthread有两种状态joinable状态和unjoinable状态，如果线程是joinable状态，当线程函数自己返回退出时或pthread_exit时都不会释放线程所占用堆栈和线程描述符（总计8K多）。只有当你调用了pthread_join之后这些资源才会被释放。若是unjoinable状态的线程，这些资源在线程函数退出时或pthread_exit时自动会被释放。</p>
+<p>unjoinable属性可以在pthread_create时指定，或在线程创建后在线程中pthread_detach自己, 如：pthread_detach(pthread_self())，将状态改为unjoinable状态，确保资源的释放。或者将线程置为 joinable,然后适时调用pthread_join。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;//包含unix系统中的各种原语函数，如sleep、read、write、fork，unistd.h在unix中类似于window中的windows.h</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NUM_THREADS     5</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">wait</span><span class="params">(<span class="keyword">void</span> *t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> i;</span><br><span class="line">   <span class="keyword">long</span> tid;</span><br><span class="line"> </span><br><span class="line">   tid = (<span class="keyword">long</span>)t;</span><br><span class="line"> </span><br><span class="line">   sleep(<span class="number">1</span>);</span><br><span class="line">   <span class="built_in">cout</span> &lt;&lt; <span class="string">"Sleeping in thread "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">   <span class="built_in">cout</span> &lt;&lt; <span class="string">"Thread with id : "</span> &lt;&lt; tid &lt;&lt; <span class="string">"  ...exiting "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">   pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> rc;</span><br><span class="line">   <span class="keyword">int</span> i;</span><br><span class="line">   <span class="keyword">pthread_t</span> threads[NUM_THREADS];</span><br><span class="line">   <span class="keyword">pthread_attr_t</span> attr;</span><br><span class="line">   <span class="keyword">void</span> *status;</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 初始化并设置线程为可连接的（joinable）</span></span><br><span class="line">   <span class="comment">// 属性对象必须初始化，否则属性不能生效，创建线程时将返回错误。</span></span><br><span class="line">   <span class="comment">// 函数将对象属性初始化为其缺省值，并分配一些存储空间，所以需要下面的函数删除初始化期间分配的存储空间。</span></span><br><span class="line">   <span class="comment">// 参数:指向一个线程属性的指针。</span></span><br><span class="line">   pthread_attr_init(&amp;attr);<span class="comment">//没有这句会发生Segmentation fault (core dumped)</span></span><br><span class="line">   pthread_attr_setdetachstate(&amp;attr, PTHREAD_CREATE_JOINABLE);</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">for</span>( i=<span class="number">0</span>; i &lt; NUM_THREADS; i++ )&#123;</span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"main() : creating thread, "</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">      rc = pthread_create(&amp;threads[i], <span class="literal">NULL</span>, wait, (<span class="keyword">void</span> *)&amp;i );</span><br><span class="line">      <span class="keyword">if</span> (rc)&#123;</span><br><span class="line">         <span class="built_in">cout</span> &lt;&lt; <span class="string">"Error:unable to create thread,"</span> &lt;&lt; rc &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// 删除属性，并等待其他线。</span></span><br><span class="line">   <span class="comment">// 属性对象被销毁，并不影响线程的属性。</span></span><br><span class="line">   pthread_attr_destroy(&amp;attr);</span><br><span class="line">   <span class="keyword">for</span>( i=<span class="number">0</span>; i &lt; NUM_THREADS; i++ )&#123;</span><br><span class="line">      rc = pthread_join(threads[i], &amp;status);</span><br><span class="line">      <span class="keyword">if</span> (rc)&#123;</span><br><span class="line">         <span class="built_in">cout</span> &lt;&lt; <span class="string">"Error:unable to join,"</span> &lt;&lt; rc &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">         <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"Main: completed thread id :"</span> &lt;&lt; i ;</span><br><span class="line">      <span class="built_in">cout</span> &lt;&lt; <span class="string">"  exiting with status :"</span> &lt;&lt; status &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">   &#125;</span><br><span class="line"> </span><br><span class="line">   <span class="built_in">cout</span> &lt;&lt; <span class="string">"Main: program exiting."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">   pthread_exit(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在ubuntu16编译后结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">main() : creating thread, 0</span><br><span class="line">main() : creating thread, 1</span><br><span class="line">main() : creating thread, 2</span><br><span class="line">main() : creating thread, 3</span><br><span class="line">main() : creating thread, 4</span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 140724715288192  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 140724715288192  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 140724715288192  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 140724715288192  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 140724715288192  ...exiting </span><br><span class="line">Main: completed thread id :0  exiting with status :0</span><br><span class="line">Main: completed thread id :1  exiting with status :0</span><br><span class="line">Main: completed thread id :2  exiting with status :0</span><br><span class="line">Main: completed thread id :3  exiting with status :0</span><br><span class="line">Main: completed thread id :4  exiting with status :0</span><br><span class="line">Main: program exiting.</span><br></pre></td></tr></table></figure>
+
+<p>这里有一点很困惑我，把<code>tid=(long)t;</code>改成<code>tid=*（（long*）t）</code>后，每个线程的id显示都是0。</p>
+<p>显示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">main() : creating thread, 0</span><br><span class="line">main() : creating thread, 1</span><br><span class="line">main() : creating thread, 2</span><br><span class="line">main() : creating thread, 3</span><br><span class="line">main() : creating thread, 4</span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 0  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 0  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 0  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 0  ...exiting </span><br><span class="line">Sleeping in thread </span><br><span class="line">Thread with id : 0  ...exiting </span><br><span class="line">Main: completed thread id :0  exiting with status :0</span><br><span class="line">Main: completed thread id :1  exiting with status :0</span><br><span class="line">Main: completed thread id :2  exiting with status :0</span><br><span class="line">Main: completed thread id :3  exiting with status :0</span><br><span class="line">Main: completed thread id :4  exiting with status :0</span><br><span class="line">Main: program exiting.</span><br></pre></td></tr></table></figure>
+
+<p>不论是储存线程创建时的值，还是公用同一片int空间，都不应该是0啊，如果是公用一个int的空间那在for循环结束后i的内存空间的值也应该是5。这里目前还弄不明白。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/shuqingstudy/p/9747004.html" target="_blank" rel="noopener">https://www.cnblogs.com/shuqingstudy/p/9747004.html</a> C++中的并发与多线程</p>
+<p><a href="https://www.runoob.com/cplusplus/cpp-multithreading.html" target="_blank" rel="noopener">https://www.runoob.com/cplusplus/cpp-multithreading.html</a> 菜鸟课程C++多线程</p>
+<p><a href="https://baike.baidu.com/item/%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3/12718298?fr=aladdin&amp;fromtitle=POSIX&amp;fromid=3792413" target="_blank" rel="noopener">https://baike.baidu.com/item/%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3/12718298?fr=aladdin&amp;fromtitle=POSIX&amp;fromid=3792413</a> 百度百科可移植操作系统接口</p>
+<p><a href="https://www.cnblogs.com/x_wukong/p/5671137.html" target="_blank" rel="noopener">https://www.cnblogs.com/x_wukong/p/5671137.html</a> linux的&lt;pthread.h&gt;</p>
+<p><a href="https://blog.csdn.net/liuzhanchen1987/article/details/8009701" target="_blank" rel="noopener">https://blog.csdn.net/liuzhanchen1987/article/details/8009701</a> linux标准库#include</p>
+<p><a href="https://www.cnblogs.com/leijiangtao/p/3995826.html" target="_blank" rel="noopener">https://www.cnblogs.com/leijiangtao/p/3995826.html</a> 线程属性的初始化以及销毁</p>
+<p><a href="https://blog.csdn.net/weibo1230123/article/details/81410241" target="_blank" rel="noopener">https://blog.csdn.net/weibo1230123/article/details/81410241</a> linux中pthread_join()与pthread_detach()详解</p>
+
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#c-多线程（c-11标准以前）"><span class="toc-text">c++ 多线程（c++11标准以前）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建线程"><span class="toc-text">创建线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#终止线程"><span class="toc-text">终止线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子1"><span class="toc-text">例子1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子2（包含pthread-join的使用）"><span class="toc-text">例子2（包含pthread_join的使用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: starsdestinations</div>
+      
+        <div>
+          原文链接: 
+          <a href="" target="_blank">http://yoursite.com/passages/2019-10-21-c++ 多线程（c++11标准以前）/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/starsdestinations/" target="_blank">github</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: 944641675@qq.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/passages/2019-9-21-php实现基本网站登陆与注册/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+  
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

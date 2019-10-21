@@ -39,7 +39,7 @@
     leancloud: {"appid":"Hyq9wkH495DgNHWhDQCOfQSp-gzGzoHsz","appkey":"WaR7nrzhliHj9aVwdQzkdlGd","comment":true,"count":true},
     welcome: {"enable":false,"interval":30},
     start_time: "2019-03-13",
-    passwords: ["34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", "34d4f0765ce3da2322e6cfdce543facea26fe4f4eadde5bd0a986b9df76bd284", ],
     is_post: true,
     lock: false,
     author: "starsdestinations",
@@ -195,6 +195,12 @@
 <p>最后可以简单地使用命令实施gps欺骗</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hackrf_transfer -t gpssim.bin 1575420000 -s 2500000 -a 1 -x 1 #-x是增益，如果不想不违法就不要太高，一般低于47都没问题</span><br></pre></td></tr></table></figure>
 
+<h2 id="动态gps欺骗"><a href="#动态gps欺骗" class="headerlink" title="动态gps欺骗"></a>动态gps欺骗</h2><p>下载google erath 桌面版，然后点击添加路径，之后把小窗口移到旁边，就可以在地图上画路径了，点击确认后在位置栏对新增加的路劲右键保存为kml文件。</p>
+<p>下载SatGenNMEA，载入kml文件，可以设置加速度和最高速度，生成nmea文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./gps-sdr-sim -e ./brdc3540.14n -g car.nmea -b 8</span><br></pre></td></tr></table></figure>
+
+<p>生成gpssim.bin文件，之后步骤与静态gps欺骗一样</p>
+<p>稍等一会后打开地图就会发现自己在跑了。</p>
 
   </article>
   <aside class="table-content" id="site-toc">
@@ -203,7 +209,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hackrf使用"><span class="toc-text">hackrf使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gps欺骗"><span class="toc-text">gps欺骗</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#hackrf使用"><span class="toc-text">hackrf使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gps欺骗"><span class="toc-text">gps欺骗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态gps欺骗"><span class="toc-text">动态gps欺骗</span></a></li></ol></li></ol>
   </div>
 </aside>
   
