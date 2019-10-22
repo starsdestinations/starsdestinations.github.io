@@ -193,7 +193,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./gps-sdr-sim -e &lt;导航电文文件&gt; -g &lt;轨迹文件&gt; -b 8 #动态路线可以使用这个命令，轨迹文件格式为name</span><br><span class="line"></span><br><span class="line">sudo ./gps-sdr-sim -e brdc3540.14n -l 66.6855097600,60.0366210938,100 -s 2500000 -b 8#静态的可以用-l设置经纬度和高度，-e是星历文件，-s是频率，-b是采样精度，hackrf一般设为8，之后会在当前目录下生成gpssim.bin文件</span><br></pre></td></tr></table></figure>
 
 <p>最后可以简单地使用命令实施gps欺骗</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hackrf_transfer -t gpssim.bin 1575420000 -s 2500000 -a 1 -x 1 #-x是增益，如果不想不违法就不要太高，一般低于47都没问题</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hackrf_transfer -t gpssim.bin -f 1575420000 -s 2500000 -a 1 -x 1 #-x是增益，如果不想不违法就不要太高，一般低于47都没问题</span><br></pre></td></tr></table></figure>
 
 <h2 id="动态gps欺骗"><a href="#动态gps欺骗" class="headerlink" title="动态gps欺骗"></a>动态gps欺骗</h2><p>下载google erath 桌面版，然后点击添加路径，之后把小窗口移到旁边，就可以在地图上画路径了，点击确认后在位置栏对新增加的路劲右键保存为kml文件。</p>
 <p>下载SatGenNMEA，载入kml文件，可以设置加速度和最高速度，生成nmea文件。</p>
@@ -306,7 +306,7 @@
     <a href="/passages/2019-9-11-hook技术的实际使用（面对经过混淆的APK）/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="/passages/2019-8-31-蓝牙抓包-Ubertooth及hollong/" data-enable="true">
+    <a href="/passages/2019-8-31-CAN总线学习/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
